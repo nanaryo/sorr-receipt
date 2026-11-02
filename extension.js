@@ -3216,6 +3216,8 @@ function deepseekCreditActivityHTML(){
   const id='sorr-receipt-tab',viewId='sorr-receipt-view';
   let button=null,panel=null,content=null,stop=null,active=false,raf=0,stopped=false;
   let nativeSelection=[],oldHidden=null;
+  const tabLists=new Map();
+  function markTabs(list){if(!tabLists.has(list))tabLists.set(list,list.getAttribute('data-sorr-receipt-tabs'));if(list.getAttribute('data-sorr-receipt-tabs')!==extensionApi.extension.id)list.setAttribute('data-sorr-receipt-tabs',extensionApi.extension.id)}
   function close(){
     active=false;stop?.();stop=null;panel?.remove();panel=null;
     document.querySelectorAll('[data-sorr-receipt-inactive]').forEach(el=>el.removeAttribute('data-sorr-receipt-inactive'));
@@ -3237,9 +3239,11 @@ function deepseekCreditActivityHTML(){
   }
   function sync(){
     if(stopped)return;
+    for(const [oldList,oldValue] of tabLists)if(!oldList.isConnected){if(oldList.getAttribute('data-sorr-receipt-tabs')===extensionApi.extension.id){if(oldValue===null)oldList.removeAttribute('data-sorr-receipt-tabs');else oldList.setAttribute('data-sorr-receipt-tabs',oldValue)}tabLists.delete(oldList)}
     const gallery=document.getElementById('marinara-home-tab-home-gallery');
     const list=gallery?.closest('[data-component="HomeBrowserHub.TabList"]');
     if(!list){close();button?.remove();button=null;return}
+    markTabs(list);
     if(active&&(!content?.isConnected||!panel?.isConnected))close();
     if(!button?.isConnected){
       close();button=document.createElement('button');button.id=id;button.type='button';button.className=gallery.className;
@@ -3253,9 +3257,10 @@ function deepseekCreditActivityHTML(){
   }
   const style=document.createElement('style');
   style.textContent='[data-sorr-receipt-hidden="'+CSS.escape(extensionApi.extension.id)+'"]{display:none!important}#'+id+'{display:inline-flex;align-items:center;gap:6px;min-height:36px}#'+id+' .sorr-receipt-avatar{display:block;flex:none;width:28px;height:28px;border-radius:50%;background-image:url('+RECEIPT_STICKERS+');background-size:198% 289%;background-position:11% 6.3%}#'+id+'[aria-selected=false]{background:transparent!important;border-color:transparent!important;color:var(--muted-foreground)!important}#'+id+'[aria-selected=true]{background:var(--card,#fff)!important;border-color:var(--border,#ddd)!important;color:var(--foreground,#28252b)!important}[data-component="HomeBrowserHub.TabList"] [data-sorr-receipt-inactive]{background:transparent!important;border-color:transparent!important;color:var(--muted-foreground)!important}@media(max-width:639px){#'+id+'{width:36px;flex:none}#'+id+' .sorr-receipt-caption{display:none}#'+id+'[aria-selected=true]{width:auto;flex:1;padding:0 8px}#'+id+'[aria-selected=true] .sorr-receipt-caption{display:inline}}';document.head.append(style);
+  style.textContent+='@media(max-width:639px){[data-sorr-receipt-tabs]{gap:2px!important;overflow-x:auto!important;overscroll-behavior-x:contain;scrollbar-width:thin}[data-sorr-receipt-tabs]>[role=tab]{box-sizing:border-box;flex:0 0 34px!important;width:34px!important;min-width:34px!important;max-width:34px!important;padding:0!important;gap:0!important}[data-sorr-receipt-tabs]>[role=tab][aria-selected=true]{flex:1 1 0%!important;width:0!important;min-width:34px!important;max-width:none!important;padding:0 6px!important;gap:4px!important}[data-sorr-receipt-tabs]>[role=tab]>.truncate,[data-sorr-receipt-tabs]>[role=tab]>.sorr-receipt-caption{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}[data-sorr-receipt-tabs]>[role=tab][aria-selected=false]>.truncate,[data-sorr-receipt-tabs]>[role=tab][aria-selected=false]>.sorr-receipt-caption{display:none!important}[data-sorr-receipt-tabs]>[role=tab][aria-selected=true]>.truncate,[data-sorr-receipt-tabs]>[role=tab][aria-selected=true]>.sorr-receipt-caption{display:block!important}[data-sorr-receipt-tabs]::-webkit-scrollbar{height:3px}}';
   function nativeClick(e){const tab=e.target instanceof Element?e.target.closest('[role=tab]'):null;if(active&&tab&&tab!==button&&tab.closest('[data-component="HomeBrowserHub.TabList"]'))close()}
   document.addEventListener('click',nativeClick,true);
   const observer=new MutationObserver(()=>{if(!raf&&!stopped)raf=requestAnimationFrame(()=>{raf=0;sync()})});observer.observe(document.body,{subtree:true,childList:true});sync();
-  extensionApi.onCleanup(()=>{stopped=true;observer.disconnect();if(raf)cancelAnimationFrame(raf);document.removeEventListener('click',nativeClick,true);close();button?.remove();style.remove()});
+  extensionApi.onCleanup(()=>{stopped=true;observer.disconnect();if(raf)cancelAnimationFrame(raf);document.removeEventListener('click',nativeClick,true);close();button?.remove();for(const [list,old] of tabLists){if(list.getAttribute('data-sorr-receipt-tabs')===extensionApi.extension.id){if(old===null)list.removeAttribute('data-sorr-receipt-tabs');else list.setAttribute('data-sorr-receipt-tabs',old)}}tabLists.clear();style.remove()});
 
 })(marinara);

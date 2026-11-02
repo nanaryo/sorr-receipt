@@ -3,7 +3,7 @@
   "version": 1,
   "config": {
     "name": "소르 영수증",
-    "version": "0.5.0",
+    "version": "0.5.1",
     "description": "날짜별 사용액 달력·한국어 영수증과 최대 10개 크레딧 설정. LinkAPI 공유 계정 합산과 키별 배율을 지원합니다.",
     "runtime": "client",
     "capabilities": [

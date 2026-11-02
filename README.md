@@ -1,6 +1,6 @@
 # 소르 영수증 / Sorr Receipt
 
-Marinara personal extension 0.5.0. Adds a receipt and credit-balance tab immediately after Sorr Gallery, with on/off control through the normal external-extension list.
+Marinara personal extension 0.5.1. Adds a receipt and credit-balance tab immediately after Sorr Gallery, with on/off control through the normal external-extension list.
 
 ## Installation and use
 
@@ -25,7 +25,7 @@ Historical rate tables are retained. LinkAPI shared-account aggregation and Nano
 
 ## Maintenance
 
-Read AGENTS.md before editing. Version 0.5.0 targets the currently inspected Marinara 2.5.0 DOM. A future Home redesign may require updating the tab adapter.
+Read AGENTS.md before editing. Version 0.5.1 targets the currently inspected Marinara 2.5.0 DOM. A future Home redesign may require updating the tab adapter.
 
 The original legacy closure contains dormant non-receipt helpers; the adapter only exposes receipt/credit UI and scopes its document access. Do not treat this first separation as a complete rewrite of the original extension.
 
@@ -83,3 +83,9 @@ Official balance endpoint: https://api-docs.deepseek.com/api/get-user-balance/ .
 - This view is built from currently available provider caches, chat scans and tracker rows. Past dates can be incomplete, and are not a permanent billing archive; no older records are fabricated or fetched merely by changing months.
 - Responsive seven-column layout, month navigation, date details, focus restoration and light/dark themes are supported. All UI/styles remain scoped to the receipt shadow view.
 - The DeepSeek card heading is now 딥시크 사용 기록. Its smaller note still names the currently included custom-tracker records and does not claim coverage of every DeepSeek call.
+
+## 0.5.1 — Mobile tab visibility
+
+The extension marks only its native tab row while mounted. Below 640 CSS pixels, inactive tabs use compact fixed pixel widths and the selected tab shares the remaining space; captions truncate instead of pushing the receipt offscreen. The same row can scroll horizontally if additional tabs exceed the available width. Desktop tab layout is unchanged. The marker and scoped rules are removed on extension cleanup and detached rows are released.
+
+Regression coverage includes 320/360/390/430px widths, enlarged text, extra tabs, real pointer clicks, selected state, native navigation, and cleanup restoration. No receipt accounting or saved account data is changed.
