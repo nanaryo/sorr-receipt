@@ -15,3 +15,5 @@
 
 - LinkAPI token-log `id` values are moving ordinals. Use `request_id` and schema-3 caches; keep the collision/reordering regression intact. Never persist view-owned `busy` flags.
 - The optional tracker companion in maintenance is read-only and uses existing authenticated memory-module routes. Keep token totals and inferred current-connection model labels distinct from billed money; historical runs lack model snapshots and input/output splits. Do not expose run content or connection credentials.
+
+- The usage calendar belongs above the receipt grid. Use UTC consistently for every source because NanoGPT only supplies UTC day buckets. Do not split balance-only period totals into invented daily amounts, silently add unknown charges, or present missing history as zero. Keep the shared-request and date-boundary regression.

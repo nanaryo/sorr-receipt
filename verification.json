@@ -1,13 +1,15 @@
 {
-  "version": "0.4.2",
+  "version": "0.5.0",
   "syntaxChecked": true,
-  "regressions": {
-    "deepseekMoneyPrecision": true,
-    "deepseekPeriodsAndConnectionFiltering": true,
-    "linkRequestDeduplication": true,
-    "trackerAggregation": true
+  "calendarDataRegression": {
+    "utcDateAlignment": true,
+    "chatReplacement": true,
+    "nanoDuplicateProfile": true,
+    "unknownCostExcluded": true,
+    "missingNotZero": true,
+    "leapMonth": true
   },
-  "fixtures": [
+  "uiFixture": [
     {
       "profile": "pc",
       "requestIdCollisionFixed": true,
@@ -18,6 +20,14 @@
       "gptVisible": true,
       "trackerVisible": true,
       "trackerMoneyNotInvented": true,
+      "calendarAtTop": true,
+      "monthNavigation": true,
+      "dailyBreakdown": true,
+      "sharedChargesCountedOnce": true,
+      "unknownMoneyExcluded": true,
+      "darkTheme": true,
+      "narrowMobileFits": true,
+      "deepseekLabelRenamed": true,
       "deepseekCreditActivityVisible": true,
       "unchangedBalanceNotZeroUsage": true,
       "unconfirmedAmountMarked": true,
@@ -35,12 +45,54 @@
       "gptVisible": true,
       "trackerVisible": true,
       "trackerMoneyNotInvented": true,
+      "calendarAtTop": true,
+      "monthNavigation": true,
+      "dailyBreakdown": true,
+      "sharedChargesCountedOnce": true,
+      "unknownMoneyExcluded": true,
+      "darkTheme": true,
+      "narrowMobileFits": true,
+      "deepseekLabelRenamed": true,
       "deepseekCreditActivityVisible": true,
       "unchangedBalanceNotZeroUsage": true,
       "unconfirmedAmountMarked": true,
       "nativeSelectionRestored": true,
       "paidCalls": 0,
       "errors": []
+    }
+  ],
+  "lifecycle": [
+    {
+      "profile": "pc",
+      "homeUnchanged": true,
+      "fetchUnchanged": true,
+      "styleOnlyInShadow": true,
+      "theme": "light",
+      "receiptCards": 1,
+      "creditCards": 1,
+      "overflow": false,
+      "legacySpy": false,
+      "reopenPreservesCards": true,
+      "maxCreditsTen": true,
+      "closedViewStopsRequests": true,
+      "errors": [],
+      "paidGenerationCalls": 0
+    },
+    {
+      "profile": "mobile",
+      "homeUnchanged": true,
+      "fetchUnchanged": true,
+      "styleOnlyInShadow": true,
+      "theme": "light",
+      "receiptCards": 1,
+      "creditCards": 1,
+      "overflow": false,
+      "legacySpy": false,
+      "reopenPreservesCards": true,
+      "maxCreditsTen": true,
+      "closedViewStopsRequests": true,
+      "errors": [],
+      "paidGenerationCalls": 0
     }
   ],
   "liveUI": [
@@ -53,6 +105,9 @@
       "providerTransport": "server-read-log-replay",
       "gptVisible": true,
       "deepseekTrackerVisible": true,
+      "calendarAtTop": true,
+      "monthNavigation": true,
+      "dailyGptBreakdownVisible": true,
       "deepseekCreditCountsVisible": true,
       "unconfirmedCostNotShownAsZero": true,
       "nativeTabVisuallyDeselected": true,
@@ -70,6 +125,9 @@
       "providerTransport": "server-read-log-replay",
       "gptVisible": true,
       "deepseekTrackerVisible": true,
+      "calendarAtTop": true,
+      "monthNavigation": true,
+      "dailyGptBreakdownVisible": true,
       "deepseekCreditCountsVisible": true,
       "unconfirmedCostNotShownAsZero": true,
       "nativeTabVisuallyDeselected": true,
@@ -79,17 +137,17 @@
       "errors": []
     }
   ],
-  "liveProviderTransport": "LinkAPI GET logs read on the server and replayed into the authenticated UI; actual tracker endpoint read directly. Browser settings writes and paid generation requests blocked.",
+  "liveProviderTransport": "Provider GET usage logs read on the server and replayed into authenticated UI. Actual tracker endpoint read directly. Browser settings writes and paid generation calls blocked.",
   "deployment": {
-    "version": "0.4.2",
+    "version": "0.5.0",
     "enabled": true,
     "storageUnchanged": true,
     "othersUnchanged": true,
     "serverRestarted": false
   },
   "sha256": {
-    "extension.js": "75b6f29dc81da075ee1f07c7293348b4fc6c4f9dd616f6139759f58af3afd8db",
-    "manifest.json": "777c5f39eb8d961561f1d31ac38d02aa9f88321294807af72381225bc0495c03",
-    "maintenance/deepseek-credit.js": "42671884063c5afb60d7394ab5497fbcbabb5afeb5f77dac209989295a9cc85a"
+    "extension.js": "fc25075bb8ae23bfe43adb823ca173a100508f2af64583e3b4ea75141884bafa",
+    "manifest.json": "462bf4750b0b409ddd2bde5506b11add2ee51fab9abefa8a608f1bb33e24008a",
+    "maintenance/usage-calendar.js": "66d77690dbb7a3a69a020da8e4a9e2e5405d0c09a33879eb0ff451ad254638c3"
   }
 }

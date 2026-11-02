@@ -1,6 +1,6 @@
 # 소르 영수증 / Sorr Receipt
 
-Marinara personal extension 0.4.2. Adds a receipt and credit-balance tab immediately after Sorr Gallery, with on/off control through the normal external-extension list.
+Marinara personal extension 0.5.0. Adds a receipt and credit-balance tab immediately after Sorr Gallery, with on/off control through the normal external-extension list.
 
 ## Installation and use
 
@@ -25,7 +25,7 @@ Historical rate tables are retained. LinkAPI shared-account aggregation and Nano
 
 ## Maintenance
 
-Read AGENTS.md before editing. Version 0.4.2 targets the currently inspected Marinara 2.5.0 DOM. A future Home redesign may require updating the tab adapter.
+Read AGENTS.md before editing. Version 0.5.0 targets the currently inspected Marinara 2.5.0 DOM. A future Home redesign may require updating the tab adapter.
 
 The original legacy closure contains dormant non-receipt helpers; the adapter only exposes receipt/credit UI and scopes its document access. Do not treat this first separation as a complete rewrite of the original extension.
 
@@ -73,3 +73,13 @@ The DeepSeek credit card now shows today's and this month's saved custom-tracker
 An unchanged balance does not establish zero usage. If the balance-derived charge is zero, the card says that no balance change was detected and the charge remains unconfirmed. Where tracker activity exists, the receipt's service rows mark the amount unconfirmed and disclose that it was not included in the money totals. No amount is inferred from total tracker tokens, which lack an input/output/cache split. Positive sub-cent amounts are preserved up to six decimals instead of rounding to zero.
 
 Official balance endpoint: https://api-docs.deepseek.com/api/get-user-balance/ . It reports current balance, not a per-request usage history. Exact balance precision, billing delay and billed amounts must not be inferred from the absence of a reported change.
+
+## 0.5.0 — Usage calendar at the top
+
+- A full-width monthly usage calendar precedes the receipt/credit grid. Select a date for service/model details; navigate the current month and previous two months. No new provider or paid generation calls are added.
+- Calendar dates consistently use UTC (09:00 KST starts a day), because NanoGPT provides UTC date-only buckets. LinkAPI timestamps, local chat-hour buckets and UTC tracker-hour buckets are converted into the same UTC calendar dates. Calendar amounts can differ from the receipt's partly local-time today/month totals at date boundaries.
+- Shared LinkAPI requests use the existing request-ID union once. Date/model-matched chat estimates are replaced when a site's logs cover that date; unmatched chat estimates remain explicitly approximate. Identical NanoGPT key/connection profiles are counted once. Amounts are converted with the current receipt currency/rates; these are not historical exchange-rate settlements.
+- Saved tracker activity is shown with unconfirmed money and is not assigned an invented token charge. Balance-only period totals from DeepSeek/OpenRouter/Google are not divided across dates. Missing days/months say no records instead of claiming zero; explicit recorded zero-cost calls can display zero.
+- This view is built from currently available provider caches, chat scans and tracker rows. Past dates can be incomplete, and are not a permanent billing archive; no older records are fabricated or fetched merely by changing months.
+- Responsive seven-column layout, month navigation, date details, focus restoration and light/dark themes are supported. All UI/styles remain scoped to the receipt shadow view.
+- The DeepSeek card heading is now 딥시크 사용 기록. Its smaller note still names the currently included custom-tracker records and does not claim coverage of every DeepSeek call.
