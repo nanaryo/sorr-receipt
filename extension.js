@@ -60,6 +60,41 @@ function mountReceipt(host) {
   syncTheme();
   const themeObserver=new MutationObserver(syncTheme);themeObserver.observe(realDocument.documentElement,{attributes:true,attributeFilter:['class','data-theme']});
   cleanup.push(()=>themeObserver.disconnect());
+function localizeReceiptUI(root){
+  if(!root)return;
+  const copy={"Edit": "설정", "Done": "완료", "Delete": "삭제", "Remove": "제거", "Cancel": "취소", "Yes, delete": "삭제하기", "Turn off": "영수증 숨기기", "Type": "서비스 종류", "Name": "표시 이름", "Currency": "통화", "Count": "집계 범위", "Relay API": "중계 API · LinkAPI 등", "Google Cloud": "Google Cloud", "Show in": "표시 통화", "₩ won": "₩ 원화", "$ dollar": "$ 달러", "Price list": "요금표", "Official": "공식 API 요금", "TODAY": "오늘 사용액", "Today": "오늘", "This month": "이번 달", "Month-end est.": "월말 예상 사용액", "Replies today": "오늘 응답 수", "from day 3": "매월 3일부터 표시", "no requests yet": "아직 사용 기록이 없어요", "BY SITE · MONTH (today)": "서비스별 이번 달 사용액 · 괄호는 오늘", "TOP MODELS IN CHATS · MONTH": "이번 달 채팅에서 많이 쓴 모델", "SUBSCRIPTIONS · USED (flat fee, not in the total)": "구독 사용량 · 정액제이므로 금액 합계에서 제외", "Show less": "접기", "Count again": "사용량 새로고침", "Check now": "잔액 새로고침", "Checking…": "조회 중…", "loading…": "불러오는 중…", "auto": "자동", "in": "입력", "out": "출력", "per call": "요청당", "FREE TRIAL": "무료 크레딧", "BALANCE · SUBSCRIPTION": "충전 잔액 · 구독", "BALANCE · API.DEEPSEEK.COM": "DeepSeek 계정 잔액", "CREDITS · OPENROUTER.AI": "OpenRouter 크레딧", "OAuth client ID": "OAuth 클라이언트 ID", "Project ID": "프로젝트 ID", "Expires on": "만료일", "Vertex only": "Vertex만", "All Google": "Google 전체", "Site address": "서비스 주소", "Access token (optional — some sites block it in the browser)": "계정 접근 토큰 · 선택 사항, 일부 사이트는 브라우저 조회를 제한해요", "User ID — shown on the same page": "사용자 ID · 토큰과 같은 계정 페이지에서 확인", "API keys — every key you use with this site, separated by spaces": "이 서비스에서 사용하는 API 키 · 여러 개면 공백으로 구분", "Price multiplier for estimates (LinkAPI: 1.6 · not for per-call or -r models)": "추정 요금 배율 · 기존 LinkAPI 기본값 1.6, 요청당 요금·-r 모델 제외", "Balance now — as shown on the site (then it counts down by itself)": "현재 잔액 · 사이트에 표시된 값을 입력하면 이후 사용액을 차감해요", "Marinara connections for this site (the receipt uses the site's own total for them)": "이 서비스에 연결된 마리나라 연결 · 해당 연결은 사이트 집계 사용액을 적용", "Works with sites built on One API / New API. Checks every 30 min or with ↻.": "One API / New API 기반 서비스용입니다. 30분마다 또는 ↻ 버튼으로 조회해요.", "Console delay (hours) — the console balance is usually ~24h behind": "콘솔 반영 지연 시간 · 시간 단위, 기본값 24", "Count Vertex with Google (optional) — sign-in": "Google 모니터링으로 Vertex 사용량 조회 · 선택 사항", "…or a service account key file": "또는 서비스 계정 키 파일 사용", "Paste the service account key (.json) here": "서비스 계정 키 파일(.json)의 내용을 붙여 넣으세요", "Each time you enter the balance, it starts counting again from now. Costs use the prices on the API receipt.": "잔액을 다시 입력하면 그 시점을 기준으로 집계를 시작해요. 비용은 영수증에 설정한 단가로 계산합니다.", "Tap Edit and enter your remaining credit ☁": "설정에서 현재 남은 크레딧을 입력해 주세요.", "Tap Edit and add the site and key ✦": "설정에서 서비스 주소와 API 키를 입력해 주세요.", "Add your key in Edit to see the balance ✦": "설정에서 API 키를 입력하면 잔액을 조회할 수 있어요.", "Leave empty to use today's rate (checked once a day).": "비워 두면 하루 한 번 조회한 환율을 사용해요.", "Prices per 1M tokens (in / out) — by site": "서비스별 100만 토큰당 요금 · 입력 / 출력", "₩ per $1": "1달러당 원화", "₩ per CN¥1": "1위안당 원화", "Models show up here after your first reply ♡": "응답 기록이 생기면 여기에 모델별 단가 설정이 표시돼요.", "This is Vertex too — already in Google's count (✓G)": "이 서비스도 Vertex 사용량에 포함 · Google 집계와 중복 제외", "Grey numbers are the defaults: official prices (Oct 2026) or the LinkAPI list, already multiplied by × (not for per-call models or names ending in -r). Numbers you type are used as they are.": "회색 값은 기존 확장의 기본 요금표입니다. 배율이 반영되며 요청당 요금·-r 모델은 제외해요. 직접 입력한 단가는 추가 배율 없이 적용됩니다.", "Vertex uses Google's own count when the Google Cloud card is connected; relay sites use the site's own spending when its card has a connection picked. Everything else counts chat replies and rerolls in Marinara.": "Google Cloud를 연결하면 Vertex는 Google 집계를 사용해요. 중계 서비스 연결을 지정하면 사이트 사용액을 적용하고, 나머지는 마리나라 응답·재생성 기록으로 계산해요.", "Turn off the receipt?": "이 영수증 카드를 숨길까요?", "Delete this credit widget?": "이 크레딧 카드를 삭제할까요?", "✦ ✓G = counted by Google · ✓site = the site's own total ✦": "✓G: Google 집계 · ✓site: 서비스 자체 집계", "API key — from platform.deepseek.com → API keys (one is enough: the balance belongs to the account)": "DeepSeek API 키 · platform.deepseek.com에서 발급, 계정 잔액이므로 키 하나면 충분해요", "DeepSeek shows the balance only. Today and this month are counted from how much the balance goes down, so they start counting from the first check. Checks every 30 min or with ↻.": "DeepSeek는 잔액을 조회해요. 오늘·이번 달 사용액은 첫 조회 이후 잔액 감소분으로 집계합니다. 30분마다 또는 ↻ 버튼으로 갱신해요.", "API keys — every OpenRouter key you use, separated by spaces": "사용 중인 OpenRouter API 키 · 여러 개면 공백으로 구분", "Management key (optional) — only for the account balance": "관리 키 · 선택 사항, 계정 전체 잔액 조회용", "…or type the balance shown on OpenRouter once (then it counts down by itself)": "또는 OpenRouter에 표시된 현재 잔액 입력 · 이후 사용액을 차감해요", "Today and this month come from each key's own usage numbers (UTC days). Checks every 30 min or with ↻.": "오늘·이번 달 사용액은 키별 사용량을 합산해요. UTC 날짜 기준이며 30분마다 또는 ↻ 버튼으로 갱신합니다.", "API keys — every NanoGPT key you use (agents too), separated by spaces. The first one is used for the balance.": "사용 중인 NanoGPT API 키 · 에이전트용도 포함해 공백으로 구분, 첫 키로 잔액 조회", "Subscription — read through this connection": "구독 사용량을 조회할 마리나라 연결", "The subscription is read through Marinara, so no key is needed for it.": "구독 정보는 마리나라 연결을 통해 읽으므로 별도 API 키가 필요하지 않아요.", "The site didn't allow a lookup from the browser": "브라우저에서 서비스 사용량을 조회하지 못했어요.", "The key was refused (check it in Edit)": "키 인증에 실패했어요. 설정에서 확인해 주세요.", "The subscription couldn't be read": "구독 정보를 읽지 못했어요.", "your NanoGPT keys": "NanoGPT API 키 입력", "the long token from your account page": "계정 페이지의 접근 토큰 입력", "no NanoGPT connection": "NanoGPT 연결 없음", "no connection uses this address yet": "이 주소를 사용하는 연결이 없어요", "match by site address": "서비스 주소로 연결 찾기", "typed balance, counting down by what your keys spend": "입력한 잔액에서 키 사용액을 차감한 값", "For the account balance add a management key in Edit, or type the balance shown on OpenRouter once.": "계정 잔액을 보려면 설정에서 관리 키를 추가하거나 OpenRouter 잔액을 직접 입력해 주세요.", "Enter the balance shown on the site in Edit once — it will go down by what your keys spend.": "설정에서 사이트 잔액을 한 번 입력하면 이후 키 사용액을 차감해요.", "This doesn't look like a service account key file": "서비스 계정 키 파일 형식인지 확인해 주세요.", "Paste the whole .json file (it starts with {)": "{로 시작하는 JSON 파일 내용 전체를 붙여 넣어 주세요."};
+  function translate(text){
+    const v=text.trim();if(!v)return text;
+    let t=copy[v];
+    if(t===undefined){
+      t=v.replace(/^checked\s+(.+)$/,'최근 확인: $1').replace(/^reading\s+(.+)$/,'사용량 읽는 중: $1')
+        .replace(/^Show all (\d+)$/,'전체 $1개 보기').replace(/^TODAY · EVERY MODEL \((\d+)\)$/,'오늘 사용한 모델 · $1개')
+        .replace(/^(\d+) calls?$/,'$1회').replace(/^Auto —\s*/,'자동 — ')
+        .replace(/^Allowed origin for the client ID:/,'클라이언트 ID에 등록할 허용 출처:')
+        .replace(/^Remaining now (.+) — total minus used, from the Cloud console$/,'현재 남은 크레딧 $1 · Cloud 콘솔의 잔액')
+        .replace(/^Total credit (.+)$/,'전체 크레딧 $1')
+        .replace(/^Exchange rate · updated (.+)$/,'환율 · 기준일 $1').replace(/^Exchange rate · loading…$/,'환율 불러오는 중…')
+        .replace(/^Couldn't read usage: /,'사용량을 읽지 못했어요: ')
+        .replace(/^✎ no price yet: (.+) — add it in Edit$/,'✎ 단가 미설정: $1 · 설정에서 입력해 주세요.')
+        .replace(/^e\.g\. /,'예: ')
+        .replace(/ — counting since /,' · 집계 시작: ').replace(/^from the balance going down/,'잔액 감소분으로 집계').replace(/ · includes agents and extensions$/,' · 에이전트·확장 사용 포함')
+        .replace(/^Expires /,'만료일: ').replace(/ · expired$/,' · 만료됨')
+        .replace(/ · today$/,' · 오늘').replace(/ · this week$/,' · 이번 주');
+      const month=t.match(/^([A-Z]{3}) (\d{4}) · ALL SITES$/);if(month){const m=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'].indexOf(month[1])+1;if(m)t=month[2]+'년 '+m+'월 · 전체 서비스'}
+      if(t.startsWith('자동 — ')){t=t.replace('no connection uses this address yet','이 주소를 사용하는 연결 없음').replace('no NanoGPT connection','NanoGPT 연결 없음').replace('match by site address','서비스 주소로 연결 찾기').replace(/(\d+) NanoGPT connections?/,'NanoGPT 연결 $1개').replace(/(\d+) connections? use /,'연결 $1개 · ')}
+    }
+    return text.replace(v,t);
+  }
+  const walker=realDocument.createTreeWalker(root,NodeFilter.SHOW_TEXT);let node;
+  while(node=walker.nextNode()){
+    if(node.parentElement?.closest('script,style,textarea,.mlh-cr-brand b,.mlh-rc-prices label > span'))continue;
+    const next=translate(node.nodeValue);if(next!==node.nodeValue)node.nodeValue=next;
+  }
+  for(const el of root.querySelectorAll('[title],[aria-label],[placeholder]'))for(const attr of ['title','aria-label','placeholder']){
+    const value=el.getAttribute(attr);if(value){const next=translate(value);if(next!==value)el.setAttribute(attr,next)}
+  }
+}
+
   // Legacy code sees only the isolated document facade above.
   
   "use strict";
@@ -499,7 +534,7 @@ function mountReceipt(host) {
   function dateLine() {
     const d = new Date();
     const day = d.toLocaleDateString("en-US", { weekday: "short", month: "short", day: "numeric" });
-    const time = d.toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+    const time = d.toLocaleTimeString("ko-KR", { hour: "numeric", minute: "2-digit" });
     return `${day} · ${time}`;
   }
   function chatsHTML() {
@@ -1228,7 +1263,7 @@ function mountReceipt(host) {
           <div class="mlh-wxloc">${esc(s.loc.name)}</div></div><i class="mlh-wxico" data-s="wx-${ico}"></i></div>`;
     const busy = sp && wx.gen.has(sp.charId);
     const say = !s.loc ? "" : `<div class="mlh-wxsay">
-        <div class="mlh-wxsay-head">${ch?.avatar ? `<img class="mlh-ava" src="${esc(ch.avatar)}" alt="">` : ""}<b>${esc(ch?.name || "")}</b><em>${cm ? esc(new Date(cm.at).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" })) : ""}</em>
+        <div class="mlh-wxsay-head">${ch?.avatar ? `<img class="mlh-ava" src="${esc(ch.avatar)}" alt="">` : ""}<b>${esc(ch?.name || "")}</b><em>${cm ? esc(new Date(cm.at).toLocaleTimeString("ko-KR", { hour: "numeric", minute: "2-digit" })) : ""}</em>
           ${sps.length > 1 ? `<span class="mlh-wxnav"><button type="button" data-wxa="prev" aria-label="Previous">‹</button>${wx.idx + 1}/${sps.length}<button type="button" data-wxa="next" aria-label="Next">›</button></span>` : ""}
           <button type="button" class="mlh-wxre" data-wxa="re" title="New comment" aria-label="New comment"${busy ? " disabled" : ""}>↻</button></div>
         <div class="mlh-wxtext">${busy ? `<span class="mlh-wxdots">writing<i>.</i><i>.</i><i>.</i></span>` : cm ? esc(cm.text) : !s.conn ? "Pick an API in Edit so they can talk ♡" : !sp ? "No characters to talk yet." : "Tap ↻ to hear from them ♡"}</div>
@@ -1469,7 +1504,7 @@ function mountReceipt(host) {
     const foot = root.querySelector(".mlh-rcptcard .mlh-rc-foot");
     if (foot) {
       const label = foot.querySelector("span"), button = foot.querySelector("[data-apre]");
-      if (label) label.textContent = ap.busy ? `reading ${ap.done}/${ap.todo || "…"}` : `checked ${ap.at ? new Date(ap.at).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }) : "—"}`;
+      if (label) label.textContent = ap.busy ? `reading ${ap.done}/${ap.todo || "…"}` : `checked ${ap.at ? new Date(ap.at).toLocaleTimeString("ko-KR", { hour: "numeric", minute: "2-digit" }) : "—"}`;
       if (button) button.disabled = ap.busy;
     }
     if (progressOnly || drag || adrag || arranging) return;
@@ -1478,7 +1513,7 @@ function mountReceipt(host) {
       const slot = [...root.querySelectorAll(".mlh-slot[data-card]")].find((el) => el.dataset.card === String(w.id));
       const card = slot?.querySelector(":scope > .mlh-card");
       if (!card || card.contains(document.activeElement) && document.activeElement.matches("input, textarea, select")) continue;
-      card.outerHTML = widHTML(w);
+      card.outerHTML = widHTML(w); localizeReceiptUI(root);
     }
   }
   async function apScan(force) {
@@ -1744,7 +1779,7 @@ function mountReceipt(host) {
     const dim = new Date(y, mo + 1, 0).getDate(), el = Math.max(1, (now.getTime() - m0) / 86400000);
     const est = A.month / el * dim;
     const top = Object.entries(M.models).sort((a, b) => (b[1].cost - a[1].cost) || (b[1].n - a[1].n)).slice(0, 5);
-    const scanned = ap.at ? new Date(ap.at).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" }) : "—";
+    const scanned = ap.at ? new Date(ap.at).toLocaleTimeString("ko-KR", { hour: "numeric", minute: "2-digit" }) : "—";
     const R = P.rates;
     const priceRow = (prov, name) => {
       const key = prov + SEP + name, pr = P.price[key] || [], c = siteCur(prov), d = siteDefault(prov, name);
@@ -2119,7 +2154,7 @@ function mountReceipt(host) {
       if (ready && Date.now() - last > 30 * 60000) crLookup(w);
     }
   }
-  const tm = (t) => new Date(t).toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+  const tm = (t) => new Date(t).toLocaleTimeString("ko-KR", { hour: "numeric", minute: "2-digit" });
   function creditHTML(w) {
     w.mode = w.mode || "gc"; w.scope = w.scope || "vertex"; w.cur = w.cur || "USD"; w.gcur = w.gcur || "USD";
     const ed = widEdit === w.id, P = apw(), mode = w.mode;
@@ -2418,7 +2453,7 @@ function mountReceipt(host) {
   function fitCap(t) { t.style.height = "auto"; t.style.height = t.scrollHeight + "px"; }
   /* ── 작업표시줄 + 시작 메뉴 (위젯 추가 · 기본 홈 보기) ── */
   let startOpen = false;
-  const tclock = () => new Date().toLocaleTimeString("en-US", { hour: "numeric", minute: "2-digit" });
+  const tclock = () => new Date().toLocaleTimeString("ko-KR", { hour: "numeric", minute: "2-digit" });
   function widFoot() {
     const nP = wid().filter((x) => x.kind === "photo").length, hasCal = wid().some((x) => x.kind === "cal"), hasMus = wid().some((x) => x.kind === "music");
     const items = [
@@ -2697,6 +2732,7 @@ function mountReceipt(host) {
       ? ["wa", "wid", "v", "cday", "cnav", "mus", "wb", "wxa"].filter((k) => ae.dataset[k] != null).map((k) => `[data-${k}="${CSS.escape(ae.dataset[k])}"]`).join("") : "";
     const cards = wid().filter(w => w.kind === "rcpt" || w.kind === "credit");
     root.innerHTML = `<div class="mlh-receipt-heading"><strong>소르 영수증 · 크레딧</strong><div>${cards.some(w => w.kind === "rcpt") ? "" : '<button type="button" data-wa="addrcpt">영수증 추가</button>'}${cards.filter(w => w.kind === "credit").length < CR_MAX ? '<button type="button" data-wa="addcredit">＋ 크레딧 추가</button>' : ""}</div></div><div class="mlh-receipt-grid">${cards.map(w => `<div class="mlh-slot" data-card="${esc(w.id)}">${widHTML(w)}</div>`).join("")}</div>`;
+    localizeReceiptUI(root);
     fillStk();
     root.querySelectorAll(".mlh-pcap").forEach(fitCap);
     if (fk) {
@@ -2956,7 +2992,7 @@ function mountReceipt(host) {
   }, true);
 
   let raf = 0;
-  const mo = new MutationObserver(() => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; sync(); }); });
+  const mo = new MutationObserver(() => { if (!raf) raf = requestAnimationFrame(() => { raf = 0; sync(); localizeReceiptUI(root); }); });
   mo.observe(document.body, { childList: true, subtree: true });
   cleanups.push(() => mo.disconnect());
 

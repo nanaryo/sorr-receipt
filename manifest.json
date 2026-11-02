@@ -3,8 +3,8 @@
   "version": 1,
   "config": {
     "name": "소르 영수증",
-    "version": "0.1.0",
-    "description": "소르 갤러리 옆에서 영수증과 크레딧을 확인하는 독립 탭. 기존 말랑 홈 스타일을 보존합니다.",
+    "version": "0.1.1",
+    "description": "소르 갤러리 옆에서 영수증과 크레딧을 한국어로 확인하는 독립 탭. 기존 말랑 홈 스타일을 보존합니다.",
     "runtime": "client",
     "capabilities": [
       "full_page_access"

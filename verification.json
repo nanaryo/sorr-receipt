@@ -1,5 +1,6 @@
 {
   "date": "2026-11-02",
+  "version": "0.1.1",
   "fixture": [
     {
       "profile": "pc",
@@ -56,9 +57,15 @@
       "errors": []
     }
   ],
+  "localizationModesChecked": [
+    "Google Cloud",
+    "Relay API",
+    "NanoGPT",
+    "DeepSeek",
+    "OpenRouter"
+  ],
   "notes": [
-    "Live browser writes to receipt storage were mocked. Other non-read requests and external provider requests were blocked.",
-    "No actual provider balance credentials or paid generation calls were used.",
-    "On/off cleanup exercised in fixture; live navigation and reopen exercised."
+    "Live writes to extension settings were mocked; external calls were blocked in browser validation.",
+    "Update verified actual saved settings unchanged. No billing logic or paid model behavior was changed."
   ]
 }

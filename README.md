@@ -1,6 +1,6 @@
 # 소르 영수증 / Sorr Receipt
 
-Marinara personal extension 0.1.0. Adds a receipt and credit-balance tab immediately after Sorr Gallery, with on/off control through the normal external-extension list.
+Marinara personal extension 0.1.1. Adds a receipt and credit-balance tab immediately after Sorr Gallery, with on/off control through the normal external-extension list.
 
 ## Installation and use
 
@@ -25,8 +25,12 @@ The legacy accounting and historical rate tables are retained for now. Displayed
 
 ## Maintenance
 
-Read AGENTS.md before editing. Version 0.1.0 targets the currently inspected Marinara 2.5.0 DOM. A future Home redesign may require updating the tab adapter.
+Read AGENTS.md before editing. Version 0.1.1 targets the currently inspected Marinara 2.5.0 DOM. A future Home redesign may require updating the tab adapter.
 
 The original legacy closure contains dormant non-receipt helpers; the adapter only exposes receipt/credit UI and scopes its document access. Do not treat this first separation as a complete rewrite of the original extension.
 
 No private settings, keys, chat text, actual usage logs or screenshots of the owner's live chats are committed.
+
+## 0.1.1 — Korean interface
+
+Settings, buttons, service-specific instructions, placeholders, refresh labels and common errors are localized to Korean. Brand names, model names, account values, machine identifiers and billing logic remain unchanged. Existing saved settings are preserved.
