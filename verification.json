@@ -1,67 +1,35 @@
 {
-  "version": "0.3.0",
-  "checks": {
-    "syntax": true,
-    "sharedAccountRegression": true,
-    "customProviderModelSeparation": true,
-    "twoProminentUsageAmounts": true,
-    "embeddedStickerDecoded": true
-  },
-  "fixtures": [
+  "version": "0.4.1",
+  "syntaxChecked": true,
+  "linkGroupingRegression": true,
+  "trackerAggregationRegression": true,
+  "missingModelsRegression": [
     {
       "profile": "pc",
-      "homeUnchanged": true,
-      "fetchUnchanged": true,
-      "styleOnlyInShadow": true,
-      "theme": "light",
-      "receiptCards": 1,
-      "creditCards": 1,
-      "overflow": false,
-      "legacySpy": false,
-      "reopenPreservesCards": true,
-      "maxCreditsTen": true,
-      "closedViewStopsRequests": true,
-      "errors": [],
-      "paidGenerationCalls": 0
-    },
-    {
-      "profile": "mobile",
-      "homeUnchanged": true,
-      "fetchUnchanged": true,
-      "styleOnlyInShadow": true,
-      "theme": "light",
-      "receiptCards": 1,
-      "creditCards": 1,
-      "overflow": false,
-      "legacySpy": false,
-      "reopenPreservesCards": true,
-      "maxCreditsTen": true,
-      "closedViewStopsRequests": true,
-      "errors": [],
-      "paidGenerationCalls": 0
-    }
-  ],
-  "accountUI": [
-    {
-      "profile": "pc",
-      "sharedCardCount": 1,
-      "keyProfiles": 2,
-      "requestDedupTotal": 10,
-      "nanoPrepaidIncluded": true,
-      "inactiveSubscriptionHidden": true,
-      "multipliersPreserved": true,
-      "sharedBalanceSaved": true,
+      "requestIdCollisionFixed": true,
+      "movingOrdinalRefreshStable": true,
+      "legacyCacheRebuilt": true,
+      "stuckBusyRecovered": true,
+      "busyNotSaved": true,
+      "gptVisible": true,
+      "trackerVisible": true,
+      "trackerMoneyNotInvented": true,
+      "nativeSelectionRestored": true,
+      "paidCalls": 0,
       "errors": []
     },
     {
       "profile": "mobile",
-      "sharedCardCount": 1,
-      "keyProfiles": 2,
-      "requestDedupTotal": 10,
-      "nanoPrepaidIncluded": true,
-      "inactiveSubscriptionHidden": true,
-      "multipliersPreserved": true,
-      "sharedBalanceSaved": true,
+      "requestIdCollisionFixed": true,
+      "movingOrdinalRefreshStable": true,
+      "legacyCacheRebuilt": true,
+      "stuckBusyRecovered": true,
+      "busyNotSaved": true,
+      "gptVisible": true,
+      "trackerVisible": true,
+      "trackerMoneyNotInvented": true,
+      "nativeSelectionRestored": true,
+      "paidCalls": 0,
       "errors": []
     }
   ],
@@ -72,6 +40,10 @@
       "adjacent": true,
       "receiptVisible": true,
       "creditVisible": true,
+      "providerTransport": "server-read-log-replay",
+      "gptVisible": true,
+      "deepseekTrackerVisible": true,
+      "nativeTabVisuallyDeselected": true,
       "reopenWorks": true,
       "fitsWidth": true,
       "themeUnchanged": true,
@@ -83,22 +55,35 @@
       "adjacent": true,
       "receiptVisible": true,
       "creditVisible": true,
+      "providerTransport": "server-read-log-replay",
+      "gptVisible": true,
+      "deepseekTrackerVisible": true,
+      "nativeTabVisuallyDeselected": true,
       "reopenWorks": true,
       "fitsWidth": true,
       "themeUnchanged": true,
       "errors": []
     }
   ],
+  "liveProviderTransport": "Provider GET logs queried on the server and replayed into the real authenticated UI; browser settings writes and paid model calls blocked. Live memory-module tracker endpoint queried directly.",
   "deployment": {
-    "version": "0.3.0",
+    "version": "0.4.1",
     "enabled": true,
     "storageUnchanged": true,
     "othersUnchanged": true,
     "serverRestarted": false
   },
+  "trackerCompanion": {
+    "readOnly": true,
+    "installed": true,
+    "rollbackPrepared": true,
+    "engineHealth": "ok",
+    "memoryHooks": "ok"
+  },
   "sha256": {
-    "extension.js": "3fd5ebe11ef3d9947497157a3c62a0d4eb1f9dea4b54d07e2ca59f1c4db07e2e",
-    "manifest.json": "a4e065d67b59985a918923ce3d1a0718d60cbe5d9293c27777beca9446c7439a",
-    "assets/receipt-stickers.png": "14f7631e385e28207aeb44d7c365de077f26115edd54e9f83bb255e590edd4bf"
+    "extension.js": "23c9492a10bf5bfb446ceff0cc593f53b090125f741b15c020ec311d3807dc56",
+    "manifest.json": "c89b7e7cb696c807b176894b9fedf28abe0401ded98ffa27743b924cf8e7a612",
+    "maintenance/link-groups.js": "546eda6babba0ae6578d2120c27e58fbcc8e7e77e83bcc8566b0ca9081725b12",
+    "maintenance/receipt-usage.cjs": "26ed96c8ed5ae1342f62013541ad482762a426ceb12d8baff9800231cbf0ab1d"
   }
 }

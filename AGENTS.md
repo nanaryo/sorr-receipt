@@ -12,3 +12,6 @@
 - Never commit account credentials, private settings, usage logs or chat data.
 - Live changes require user approval and a scoped rollback; approval for an existing scope remains valid.
 - This was adapted from the owner's installed Mallang receipt source. No new license or third-party authorship claim is assigned by this repository.
+
+- LinkAPI token-log `id` values are moving ordinals. Use `request_id` and schema-3 caches; keep the collision/reordering regression intact. Never persist view-owned `busy` flags.
+- The optional tracker companion in maintenance is read-only and uses existing authenticated memory-module routes. Keep token totals and inferred current-connection model labels distinct from billed money; historical runs lack model snapshots and input/output splits. Do not expose run content or connection credentials.

@@ -7,7 +7,7 @@ function summarizeLinkGroup(members,readLog,convert,now=Date.now()){
  const accounts=candidates.filter(w=>w.last.acct);const latest=accounts[0];
  const day=new Date(now);day.setHours(0,0,0,0);const month=new Date(now);month.setDate(1);month.setHours(0,0,0,0);
  const unique=new Map();let legacy=false,covered=false;
- for(const w of members){const cache=readLog(w);if(w.last?.src==='logs'&&cache?.linkSchema===2)covered=true;for(const row of cache?.rows||[]){if(!row[3]){legacy=true;continue}const id=String(row[3]);if(!unique.has(id))unique.set(id,{at:row[0],usd:convert(Number(row[1])||0,w.cur==='CNY'?'CNY':'USD'),model:row[2],id})}}
+ for(const w of members){const cache=readLog(w);if(cache?.unidentified||cache?.rows?.length&&cache.linkSchema!==3)legacy=true;if(w.last?.src==='logs'&&cache?.linkSchema===3)covered=true;for(const row of (cache?.linkSchema===3?cache.rows:[])){if(!row[3]){legacy=true;continue}const id=String(row[3]);if(!unique.has(id))unique.set(id,{at:row[0],usd:convert(Number(row[1])||0,w.cur==='CNY'?'CNY':'USD'),model:row[2],id})}}
  const records=[...unique.values()];const since=t=>records.filter(r=>r.at>=t).reduce((sum,r)=>sum+r.usd,0);
  const known=x=>typeof x==='number'&&Number.isFinite(x)&&x>=0;
  let today=null,totalMonth=null,source='missing';

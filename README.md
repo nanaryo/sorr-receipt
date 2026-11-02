@@ -1,6 +1,6 @@
 # 소르 영수증 / Sorr Receipt
 
-Marinara personal extension 0.3.0. Adds a receipt and credit-balance tab immediately after Sorr Gallery, with on/off control through the normal external-extension list.
+Marinara personal extension 0.4.1. Adds a receipt and credit-balance tab immediately after Sorr Gallery, with on/off control through the normal external-extension list.
 
 ## Installation and use
 
@@ -25,7 +25,7 @@ Historical rate tables are retained. LinkAPI shared-account aggregation and Nano
 
 ## Maintenance
 
-Read AGENTS.md before editing. Version 0.3.0 targets the currently inspected Marinara 2.5.0 DOM. A future Home redesign may require updating the tab adapter.
+Read AGENTS.md before editing. Version 0.4.1 targets the currently inspected Marinara 2.5.0 DOM. A future Home redesign may require updating the tab adapter.
 
 The original legacy closure contains dormant non-receipt helpers; the adapter only exposes receipt/credit UI and scopes its document access. Do not treat this first separation as a complete rewrite of the original extension.
 
@@ -54,3 +54,14 @@ Tests cover duplicate request IDs, separate requests with equal timestamps/costs
 - The tab and heading use an owner-provided sticker sheet, displayed through a scoped CSS crop. The original sheet is preserved under assets and embedded once in the standalone script.
 - Custom-provider chat estimates are separated by model. They never inherit the first connection name: several services share the same provider identifier, which previously mislabeled unrelated spending as DeepSeek. These historical buckets lack connection IDs and remain labeled as chat estimates rather than confirmed billing attribution.
 - The DeepSeek balance card explains that its usage starts at the first balance observation and cannot backfill earlier charges. Existing saved balances, keys, connection selections and multipliers are preserved.
+
+## 0.4.1 — Missing GPT and tracker records
+
+- LinkAPI's numeric `id` is an ordinal local to each token response, not a stable request identifier. Deduplication now uses the actual `request_id`. Schema-2 caches are preserved as legacy rows, then rebuilt in schema 3; do not reuse their numeric identifiers. Separate calls with the same ordinal survive, shared request IDs count once, and reordering does not duplicate calls.
+- Opening the receipt and using its refresh button refreshes credit lookups; open-view periodic refresh uses a three-minute threshold.
+- The selected receipt tab overrides cloned active classes, visibly deselects native tabs, and restores native selection/styles on close or disable.
+- The owner's optional read-only tracker companion exposes `/api/memory-module/receipt-usage`. It reads saved custom-tracker run timestamps and total tokens through the engine's file-store API. It returns hourly aggregates without prompts, outputs or credentials and never calls a paid model.
+- Tracker rows appear in today's models separately from billed API usage. Historical agent runs do not store a model snapshot or input/output token split: the model label explicitly uses the current agent connection, total tokens are displayed, and an invented token cost is never added. Actual balance changes remain in the DeepSeek credit card. Missing companion access is disclosed, and partial results are labeled.
+- Companion source is in `maintenance/receipt-usage.cjs`. On this owner's server it is registered by the existing memory module with `require('./receipt-usage.cjs').register(app,{serverDist,engine})` at the start of `routes(app)`. This requires a server restart; it is not auto-installed by GitHub extension updates. The browser extension itself still supports normal on/off, and the companion only serves read requests. Back up the original service before changing it; keep the engine's existing authentication in place.
+
+The transient credit-card `busy` flag is reset on preference load and omitted from saved preferences. An interrupted lookup cannot lock future refreshes after reopening the receipt.

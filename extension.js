@@ -178,7 +178,7 @@ function localizeReceiptUI(root){
   let mlhPrefsLoaded = !store;
   async function loadPrefs() {
     for (let mlhTry = 0; mlhTry < 4 && !mlhPrefsLoaded; mlhTry++) {
-      try { const v = (await store?.get()) || {}; if (v.mallangHome) prefs = { ...prefs, ...v.mallangHome }; mlhPrefsLoaded = true; }
+      try { const v = (await store?.get()) || {}; if (v.mallangHome) prefs = { ...prefs, ...v.mallangHome }; for(const w of prefs.wid||[])w.busy=false; mlhPrefsLoaded = true; }
       catch { await new Promise((r) => setTimeout(r, 1500 * (mlhTry + 1))); }
     }
     if (!mlhPrefsLoaded) console.warn("[말랑 홈] 설정을 못 읽어서, 이번엔 저장하지 않아요 (새로고침하면 다시 읽어요)");
@@ -188,7 +188,7 @@ function localizeReceiptUI(root){
     clearTimeout(saveTimer);
     saveTimer = setTimeout(async () => {
       if (!mlhPrefsLoaded) return; // 1.17.2: 못 읽은 상태로는 저장 안 함
-      try { await store?.patch({ mallangHome: prefs }); } catch { /* 무시 */ }
+      try { await store?.patch({ mallangHome: {...prefs,wid:(prefs.wid||[]).map(({busy,...saved})=>saved)} }); } catch { /* 무시 */ }
       if (showSaved) { const el = root?.querySelector(".mlh-saved"); if (el) el.textContent = "saved ♡"; }
     }, 500);
   }
@@ -201,7 +201,7 @@ function localizeReceiptUI(root){
       const conns = await api("/connections");
       data.conns = Array.isArray(conns) ? conns : [];
       lastLoad = Date.now();
-      apScan(false); crAuto();
+      apScan(false); crAuto(force);
     } catch (e) { console.warn("[영수증] 연결 목록을 읽지 못했어", e); }
     finally { loading = false; render(); }
   }
@@ -1551,6 +1551,7 @@ function localizeReceiptUI(root){
         for (const [m, r] of Object.entries(ms)) { const R = H[m] || (H[m] = [0, 0, 0, 0]); R[0] += r[0]; R[1] += r[1]; R[2] += r[2]; R[3] += r[3] || 0; }
       }
       ap.hours = hours; ap.from = from; ap.at = Date.now();
+      await loadTrackerUsage();
       if (wid().some((w) => w.kind === "rcpt")) await apGoogle();
     } catch (e) { ap.err = "Couldn't read usage: " + (e?.message || e); }
     finally { ap.busy = false; apPaint(); }
@@ -1667,7 +1668,7 @@ function summarizeLinkGroup(members,readLog,convert,now=Date.now()){
  const accounts=candidates.filter(w=>w.last.acct);const latest=accounts[0];
  const day=new Date(now);day.setHours(0,0,0,0);const month=new Date(now);month.setDate(1);month.setHours(0,0,0,0);
  const unique=new Map();let legacy=false,covered=false;
- for(const w of members){const cache=readLog(w);if(w.last?.src==='logs'&&cache?.linkSchema===2)covered=true;for(const row of cache?.rows||[]){if(!row[3]){legacy=true;continue}const id=String(row[3]);if(!unique.has(id))unique.set(id,{at:row[0],usd:convert(Number(row[1])||0,w.cur==='CNY'?'CNY':'USD'),model:row[2],id})}}
+ for(const w of members){const cache=readLog(w);if(cache?.unidentified||cache?.rows?.length&&cache.linkSchema!==3)legacy=true;if(w.last?.src==='logs'&&cache?.linkSchema===3)covered=true;for(const row of (cache?.linkSchema===3?cache.rows:[])){if(!row[3]){legacy=true;continue}const id=String(row[3]);if(!unique.has(id))unique.set(id,{at:row[0],usd:convert(Number(row[1])||0,w.cur==='CNY'?'CNY':'USD'),model:row[2],id})}}
  const records=[...unique.values()];const since=t=>records.filter(r=>r.at>=t).reduce((sum,r)=>sum+r.usd,0);
  const known=x=>typeof x==='number'&&Number.isFinite(x)&&x>=0;
  let today=null,totalMonth=null,source='missing';
@@ -1755,6 +1756,26 @@ function linkGroupAction(t){
     return (m) => apProv(m) === "google_vertex" || pairs.has(apProv(m) + SEP + nm(apModelName(m))) || anyP.has(apProv(m)) || !!inVx[apProv(m)];
   }
   // 오늘 쓴 모델 전부: Vertex = 구글 집계 · 로그 있는 중계 사이트 = 사이트 로그 · 나머지 = 채팅 기록 (겹치지 않게)
+  const trackerUsage={rows:[],error:'',partial:false};
+  async function loadTrackerUsage(){
+    const now=new Date(),from=new Date(now.getFullYear(),now.getMonth(),1).toISOString();
+    try{
+      const r=await api('/memory-module/receipt-usage?from='+encodeURIComponent(from));
+      if(!r||r.source!=='saved-custom-tracker-runs'||!Array.isArray(r.rows))throw Error('unavailable');
+      trackerUsage.rows=r.rows;trackerUsage.error='';trackerUsage.partial=!!r.partial;
+    }catch{trackerUsage.error='커스텀 트래커 사용 기록을 조회하지 못했어요. 서버 집계 연결을 확인해 주세요.';}
+  }
+  function trackerTodayModels(){
+    const now=new Date(),since=new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime(),by=new Map();
+    for(const r of trackerUsage.rows){
+      if(Date.parse(r.hour+':00:00Z')<since)continue;
+      const key=JSON.stringify([r.connectionId,r.model]);
+      if(!by.has(key))by.set(key,{name:(r.model||'연결 모델 미확인')+' (현재 연결 기준)',site:'커스텀 트래커 · 저장 기록',src:'agent',cost:null,n:0,tok:0});
+      const x=by.get(key);x.n+=r.n;x.tok+=r.tokens;
+    }
+    return [...by.values()];
+  }
+
   function apTodayModels() {
     const now = new Date(), t0 = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime(), out = [];
     const gm = ap.gm?.today, vx = gm ? vxMatcher() : null;
@@ -1779,6 +1800,7 @@ function linkGroupAction(t){
         const x = chat[m] || (chat[m] = { p: 0, o: 0, n: 0 }); x.p += r[0]; x.o += r[1]; x.n += r[2];
       } }
     for (const [m, x] of Object.entries(chat)) { const rw = relayFor(m); out.push({ name: apModelName(m), site: rw ? (rw.name || hostOf(rw.url)) : (PROV_NAME[apProv(m)] || apProv(m)), src: "chat", cost: apCost(m, x.p, x.o, x.n), n: x.n, tok: x.p + x.o }); }
+    out.push(...trackerTodayModels());
     return out.sort((a, b) => (b.cost ?? -1) - (a.cost ?? -1));
   }
   function apTotals() {
@@ -1900,11 +1922,11 @@ function linkGroupAction(t){
         ${(() => {
           const L = apTodayModels(); if (!L.length) return "";
           const lim = ap.allModels ? L.length : 10, tg = { G: "✓G", site: "✓site", chat: "" };
-          return `<div class="mlh-rc-cut"></div><div class="mlh-rc-sub">TODAY · EVERY MODEL (${L.length})</div><div class="mlh-rc-items">${L.slice(0, lim).map((x) => line(`${tg[x.src] ? `<u>${tg[x.src]}</u> ` : ""}${esc(x.name)} <small>· ${esc(x.site)}</small>`, x.cost == null ? "?" : show(x.cost), x.n ? x.n + (x.n > 1 ? " calls" : " call") : kTok(x.tok || 0) + " tok")).join("")}</div>${L.length > 10 ? `<button type="button" class="mlh-link" data-apall>${ap.allModels ? "Show less" : `Show all ${L.length}`}</button>` : ""}`;
+          return `<div class="mlh-rc-cut"></div><div class="mlh-rc-sub">TODAY · EVERY MODEL (${L.length})</div><div class="mlh-rc-items">${L.slice(0, lim).map((x) => line(`${tg[x.src] ? `<u>${tg[x.src]}</u> ` : ""}${esc(x.name)} <small>· ${esc(x.site)}</small>`, x.src === "agent" ? "금액 별도 집계" : x.cost == null ? "?" : show(x.cost), x.src === "agent" ? x.n+"회 · "+kTok(x.tok)+" 토큰" : x.n ? x.n + (x.n > 1 ? " calls" : " call") : kTok(x.tok || 0) + " tok")).join("")}</div>${L.length > 10 ? `<button type="button" class="mlh-link" data-apall>${ap.allModels ? "Show less" : `Show all ${L.length}`}</button>` : ""}`;
         })()}
         ${top.length ? `<div class="mlh-rc-cut"></div><div class="mlh-rc-sub">TOP MODELS IN CHATS · MONTH</div><div class="mlh-rc-items">${top.map(([m, x]) => line(esc(m), x.priced ? show(x.cost) : "?", `${x.n} calls`)).join("")}</div>` : ""}
         ${(() => { const miss = new Set(); for (const [n, x] of Object.entries(M.models)) if (!x.priced) miss.add(n); if (ap.gm?.month) for (const [m, r] of Object.entries(ap.gm.month)) if (r[0] + r[1] > 0 && apCost("google_vertex" + SEP + m, r[0], r[1]) == null) miss.add(m); return miss.size ? `<div class="mlh-rc-note">✎ no price yet: ${[...miss].slice(0, 6).map(esc).join(", ")}${miss.size > 6 ? "…" : ""} — add it in Edit</div>` : ""; })()}
-        ${ap.err ? `<div class="mlh-empty mlh-perr">${esc(ap.err)}</div>` : ""}${ap.gm?.err ? `<div class="mlh-empty mlh-perr">Google: ${esc(ap.gm.err)}</div>` : ""}
+        ${trackerUsage.error ? `<div class="mlh-empty">${esc(trackerUsage.error)}</div>` : ""}${trackerUsage.rows.length ? `<div class="mlh-rc-note">트래커는 저장된 실행 횟수·총 토큰을 표시해요. 과거 모델은 현재 연결 설정 기준이며, 입력·출력 구분이 없어 토큰 요금을 더하지 않아요. 실제 사용액은 크레딧에서 별도 집계합니다.${trackerUsage.partial ? " · 일부 기록만 조회됨" : ""}</div>` : ""}${ap.err ? `<div class="mlh-empty mlh-perr">${esc(ap.err)}</div>` : ""}${ap.gm?.err ? `<div class="mlh-empty mlh-perr">Google: ${esc(ap.gm.err)}</div>` : ""}
         <div class="mlh-rc-foot"><i class="mlh-barcode"></i><span>${ap.busy ? `reading ${ap.done}/${ap.todo || "…"}` : `checked ${esc(scanned)}`}</span><button type="button" class="mlh-wxre" data-apre title="Count again" aria-label="Count again"${ap.busy ? " disabled" : ""}>↻</button></div>
         <div class="mlh-rc-thx">✦ ✓G = counted by Google · ✓site = the site's own total ✦</div>
       </div>
@@ -2022,7 +2044,7 @@ function linkGroupAction(t){
   }
   async function crLookup(w) {
     if (w.busy) return;
-    w.busy = true; if(isLinkCard(w))w.sorrLinkRevision=2; render();
+    w.busy = true; if(isLinkCard(w))w.sorrLinkRevision=3; render();
     try {
       if (w.mode === "gc") {
         if (!hasG(w)) return;
@@ -2165,7 +2187,7 @@ function linkGroupAction(t){
         let logInfo = "", logN = 0;
         try {
           const qpu = await relayQpu(w, base);
-          const store = relayLogStore(w); if(isLinkCard(w)&&store.linkSchema!==2){store.legacyRows=store.rows;store.rows=[];store.ids={};delete store.first0;store.linkSchema=2;} const before = store.rows.length;
+          const store = relayLogStore(w); if(isLinkCard(w)&&store.linkSchema!==3){store.legacyRows=store.rows;store.rows=[];store.ids={};delete store.first0;store.linkSchema=3;} const before = store.rows.length;
           let capped = false, okAny = false, lastErr = "";
           for (const k of keys) {
             let j = null;
@@ -2183,9 +2205,9 @@ function linkGroupAction(t){
             okAny = true; if (j.length >= 1000) capped = true;
             for (const r of j) {
               const t = (Number(r.created_at) || 0) * 1000; if (!t) continue;
-              const id = String(r.id ?? `${r.created_at}:${r.quota}:${r.model_name}:${r.prompt_tokens}`);
+              const id = isLinkCard(w)?String(r.request_id||'').trim():String(r.id ?? `${r.created_at}:${r.quota}:${r.model_name}:${r.prompt_tokens}`); if(isLinkCard(w)&&!id){store.unidentified=true;continue;}
               if (store.ids[id]) continue; store.ids[id] = 1;
-              store.rows.push([t, (Number(r.quota) || 0) / qpu, String(r.model_name || ""),r.id==null?null:String(r.id)]);
+              store.rows.push([t, (Number(r.quota) || 0) / qpu, String(r.model_name || ""),(r.request_id==null?null:String(r.request_id).trim()||null)]);
             }
           }
           if (!okAny) throw new Error(lastErr || "no logs");
@@ -2207,14 +2229,14 @@ function linkGroupAction(t){
       } catch (e) { w.last = { at: Date.now(), err: (acctErr ? acctErr + " · " : "") + "Key: " + errText(e) }; }
     } finally { w.busy = false; savePrefs(); render(); }
   }
-  function crAuto() {
+  function crAuto(force = false) {
     if (wid().some((w) => w.kind === "credit" || w.kind === "rcpt")) fxLoad(false);
     if (wid().some((w) => w.kind === "credit" && w.mode === "gc" && !w.sa && w.gcid)) gisLoad().catch(() => {});
     for (const w of wid()) {
       if (w.kind !== "credit" || w.busy) continue;
       const ready = w.mode === "relay" ? w.url && (w.key || w.tok) : w.mode === "ds" || w.mode === "or" ? w.key || w.mgmt : w.mode === "nano" ? w.key || w.conn || (data.conns || []).some((c) => /nano/i.test(String(c.provider || ""))) : w.at && (w.sa || (hasG(w) && oValid(w)));
       const last = w.mode === "gc" ? w.mon?.chk || 0 : w.last?.at || 0;
-      if (ready && (Date.now() - last > 30 * 60000 || isLinkCard(w)&&w.sorrLinkRevision!==2)) crLookup(w);
+      if (ready && (force || Date.now() - last > 3 * 60000 || isLinkCard(w)&&w.sorrLinkRevision!==3)) crLookup(w);
     }
   }
   const tm = (t) => new Date(t).toLocaleTimeString("ko-KR", { hour: "numeric", minute: "2-digit" });
@@ -2367,7 +2389,7 @@ function linkGroupAction(t){
     </section>`;
   }
   function apClick(t) {
-    if (t.closest("[data-apre]")) { apScan(true); return true; }
+    if (t.closest("[data-apre]")) { apScan(true); crAuto(true); return true; }
     if (t.closest("[data-apall]")) { ap.allModels = !ap.allModels; render(); return true; }
     const cr = t.closest("[data-crre]"); if (cr) {
       const w = widById(cr.dataset.crre);
@@ -3098,6 +3120,7 @@ function linkGroupAction(t){
   let nativeSelection=[],oldHidden=null;
   function close(){
     active=false;stop?.();stop=null;panel?.remove();panel=null;
+    document.querySelectorAll('[data-sorr-receipt-inactive]').forEach(el=>el.removeAttribute('data-sorr-receipt-inactive'));
     if(content){if(oldHidden===null)content.removeAttribute('data-sorr-receipt-hidden');else content.setAttribute('data-sorr-receipt-hidden',oldHidden)}
     content=null;
     for(const [el,value] of nativeSelection){if(el.isConnected){if(value===null)el.removeAttribute('aria-selected');else el.setAttribute('aria-selected',value)}}
@@ -3109,7 +3132,7 @@ function linkGroupAction(t){
     if(!content)return;
     active=true;oldHidden=content.getAttribute('data-sorr-receipt-hidden');content.setAttribute('data-sorr-receipt-hidden',extensionApi.extension.id);
     nativeSelection=[...button.parentElement.querySelectorAll('[role=tab]')].filter(e=>e!==button).map(e=>[e,e.getAttribute('aria-selected')]);
-    for(const [el] of nativeSelection)el.setAttribute('aria-selected','false');
+    for(const [el] of nativeSelection){el.setAttribute('aria-selected','false');el.setAttribute('data-sorr-receipt-inactive','true')}
     button.setAttribute('aria-selected','true');button.setAttribute('tabindex','0');
     panel=document.createElement('section');panel.id=viewId;panel.setAttribute('role','tabpanel');panel.setAttribute('aria-labelledby',id);panel.className='min-h-0 flex-1 overflow-y-auto';panel.attachShadow({mode:'open'});
     content.after(panel);stop=mountReceipt(panel);
@@ -3128,9 +3151,10 @@ function linkGroupAction(t){
       button.addEventListener('keydown',e=>{if(e.key==='Escape'){close();gallery.focus()}else if(e.key==='ArrowRight'||e.key==='ArrowLeft'){e.preventDefault();const tabs=[...list.querySelectorAll('[role=tab]')];tabs[(tabs.indexOf(button)+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length]?.focus()}});
       gallery.after(button);
     }else if(button.previousElementSibling!==gallery)gallery.after(button);
+    if(active){for(const [el] of nativeSelection)if(el.isConnected){if(el.getAttribute('aria-selected')!=='false')el.setAttribute('aria-selected','false');if(!el.hasAttribute('data-sorr-receipt-inactive'))el.setAttribute('data-sorr-receipt-inactive','true')}}
   }
   const style=document.createElement('style');
-  style.textContent='[data-sorr-receipt-hidden="'+CSS.escape(extensionApi.extension.id)+'"]{display:none!important}#'+id+'{display:inline-flex;align-items:center;gap:6px;min-height:36px}#'+id+' .sorr-receipt-avatar{display:block;flex:none;width:28px;height:28px;border-radius:50%;background-image:url('+RECEIPT_STICKERS+');background-size:198% 289%;background-position:11% 6.3%}#'+id+'[aria-selected=true]{background:var(--background);color:var(--foreground)}@media(max-width:639px){#'+id+'{width:36px;flex:none}#'+id+' .sorr-receipt-caption{display:none}#'+id+'[aria-selected=true]{width:auto;flex:1;padding:0 8px}#'+id+'[aria-selected=true] .sorr-receipt-caption{display:inline}}';document.head.append(style);
+  style.textContent='[data-sorr-receipt-hidden="'+CSS.escape(extensionApi.extension.id)+'"]{display:none!important}#'+id+'{display:inline-flex;align-items:center;gap:6px;min-height:36px}#'+id+' .sorr-receipt-avatar{display:block;flex:none;width:28px;height:28px;border-radius:50%;background-image:url('+RECEIPT_STICKERS+');background-size:198% 289%;background-position:11% 6.3%}#'+id+'[aria-selected=false]{background:transparent!important;border-color:transparent!important;color:var(--muted-foreground)!important}#'+id+'[aria-selected=true]{background:var(--card,#fff)!important;border-color:var(--border,#ddd)!important;color:var(--foreground,#28252b)!important}[data-component="HomeBrowserHub.TabList"] [data-sorr-receipt-inactive]{background:transparent!important;border-color:transparent!important;color:var(--muted-foreground)!important}@media(max-width:639px){#'+id+'{width:36px;flex:none}#'+id+' .sorr-receipt-caption{display:none}#'+id+'[aria-selected=true]{width:auto;flex:1;padding:0 8px}#'+id+'[aria-selected=true] .sorr-receipt-caption{display:inline}}';document.head.append(style);
   function nativeClick(e){const tab=e.target instanceof Element?e.target.closest('[role=tab]'):null;if(active&&tab&&tab!==button&&tab.closest('[data-component="HomeBrowserHub.TabList"]'))close()}
   document.addEventListener('click',nativeClick,true);
   const observer=new MutationObserver(()=>{if(!raf&&!stopped)raf=requestAnimationFrame(()=>{raf=0;sync()})});observer.observe(document.body,{subtree:true,childList:true});sync();
