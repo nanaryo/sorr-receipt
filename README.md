@@ -1,6 +1,6 @@
 # 소르 영수증 / Sorr Receipt
 
-Marinara personal extension 0.2.0. Adds a receipt and credit-balance tab immediately after Sorr Gallery, with on/off control through the normal external-extension list.
+Marinara personal extension 0.3.0. Adds a receipt and credit-balance tab immediately after Sorr Gallery, with on/off control through the normal external-extension list.
 
 ## Installation and use
 
@@ -25,7 +25,7 @@ Historical rate tables are retained. LinkAPI shared-account aggregation and Nano
 
 ## Maintenance
 
-Read AGENTS.md before editing. Version 0.2.0 targets the currently inspected Marinara 2.5.0 DOM. A future Home redesign may require updating the tab adapter.
+Read AGENTS.md before editing. Version 0.3.0 targets the currently inspected Marinara 2.5.0 DOM. A future Home redesign may require updating the tab adapter.
 
 The original legacy closure contains dormant non-receipt helpers; the adapter only exposes receipt/credit UI and scopes its document access. Do not treat this first separation as a complete rewrite of the original extension.
 
@@ -47,3 +47,10 @@ Settings, buttons, service-specific instructions, placeholders, refresh labels a
 - NanoGPT chargeable usage remains included in costs. Inactive subscription metadata is not shown as a flat-fee subscription. An actual active subscription may be displayed separately.
 
 Tests cover duplicate request IDs, separate requests with equal timestamps/costs, distinct account groups, missing caches, legacy uncertainty, currencies, stored multiplier preservation, the prepaid subtotal, and a real 10-card UI limit. These are deterministic tests, not a reconciliation of the owner's real provider invoices.
+
+## 0.3.0 — Summary and connection labels
+
+- Today and month usage are both prominent at the top of the receipt, including narrow mobile screens.
+- The tab and heading use an owner-provided sticker sheet, displayed through a scoped CSS crop. The original sheet is preserved under assets and embedded once in the standalone script.
+- Custom-provider chat estimates are separated by model. They never inherit the first connection name: several services share the same provider identifier, which previously mislabeled unrelated spending as DeepSeek. These historical buckets lack connection IDs and remain labeled as chat estimates rather than confirmed billing attribution.
+- The DeepSeek balance card explains that its usage starts at the first balance observation and cannot backfill earlier charges. Existing saved balances, keys, connection selections and multipliers are preserved.

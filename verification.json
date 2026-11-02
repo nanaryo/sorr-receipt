@@ -1,7 +1,13 @@
 {
-  "date": "2026-11-02",
-  "version": "0.2.0",
-  "fixture": [
+  "version": "0.3.0",
+  "checks": {
+    "syntax": true,
+    "sharedAccountRegression": true,
+    "customProviderModelSeparation": true,
+    "twoProminentUsageAmounts": true,
+    "embeddedStickerDecoded": true
+  },
+  "fixtures": [
     {
       "profile": "pc",
       "homeUnchanged": true,
@@ -59,7 +65,7 @@
       "errors": []
     }
   ],
-  "live": [
+  "liveUI": [
     {
       "profile": "pc",
       "tabVisible": true,
@@ -83,9 +89,16 @@
       "errors": []
     }
   ],
-  "notes": [
-    "Account UI uses synthetic data. Provider requests and real settings writes were blocked during live-browser checks.",
-    "Pure grouping checks: request-ID union, account totals/balance once, distinct request IDs, separate account groups, legacy uncertainty, absent caches and currency conversion.",
-    "Server update verified saved keys/configuration unchanged; actual user invoices were not reconciled."
-  ]
+  "deployment": {
+    "version": "0.3.0",
+    "enabled": true,
+    "storageUnchanged": true,
+    "othersUnchanged": true,
+    "serverRestarted": false
+  },
+  "sha256": {
+    "extension.js": "3fd5ebe11ef3d9947497157a3c62a0d4eb1f9dea4b54d07e2ca59f1c4db07e2e",
+    "manifest.json": "a4e065d67b59985a918923ce3d1a0718d60cbe5d9293c27777beca9446c7439a",
+    "assets/receipt-stickers.png": "14f7631e385e28207aeb44d7c365de077f26115edd54e9f83bb255e590edd4bf"
+  }
 }
