@@ -1,0 +1,64 @@
+{
+  "date": "2026-11-02",
+  "fixture": [
+    {
+      "profile": "pc",
+      "homeUnchanged": true,
+      "fetchUnchanged": true,
+      "styleOnlyInShadow": true,
+      "theme": "light",
+      "receiptCards": 1,
+      "creditCards": 1,
+      "overflow": false,
+      "legacySpy": false,
+      "reopenPreservesCards": true,
+      "closedViewStopsRequests": true,
+      "errors": [],
+      "paidGenerationCalls": 0
+    },
+    {
+      "profile": "mobile",
+      "homeUnchanged": true,
+      "fetchUnchanged": true,
+      "styleOnlyInShadow": true,
+      "theme": "light",
+      "receiptCards": 1,
+      "creditCards": 1,
+      "overflow": false,
+      "legacySpy": false,
+      "reopenPreservesCards": true,
+      "closedViewStopsRequests": true,
+      "errors": [],
+      "paidGenerationCalls": 0
+    }
+  ],
+  "live": [
+    {
+      "profile": "pc",
+      "tabVisible": true,
+      "adjacent": true,
+      "receiptVisible": true,
+      "creditVisible": true,
+      "reopenWorks": true,
+      "fitsWidth": true,
+      "themeUnchanged": true,
+      "errors": []
+    },
+    {
+      "profile": "mobile",
+      "tabVisible": true,
+      "adjacent": true,
+      "receiptVisible": true,
+      "creditVisible": true,
+      "reopenWorks": true,
+      "fitsWidth": true,
+      "themeUnchanged": true,
+      "errors": []
+    }
+  ],
+  "notes": [
+    "Live browser writes to receipt storage were mocked. Other non-read requests and external provider requests were blocked.",
+    "No actual provider balance credentials or paid generation calls were used.",
+    "On/off cleanup exercised in fixture; live navigation and reopen exercised."
+  ]
+}
