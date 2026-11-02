@@ -1,0 +1,13 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const ctx=vm.createContext({URL,Date});vm.runInContext(fs.readFileSync(__dirname+'/link-groups.js','utf8'),ctx);
+const now=Date.now(),card=(id,mul)=>({id,kind:'credit',mode:'relay',url:'https://api.linkapi.ai',mul,cur:'USD',last:{at:now,src:'logs',trk:true,today:20,month:20,rem:15}});
+const a=card('A',0.5),b=card('B',1.6),snapshot=JSON.stringify([a,b]);
+const logs={A:{rows:[[now,2,'m1','1'],[now,3,'m2','shared']]},B:{rows:[[now,3,'m2','shared'],[now,5,'m1','2']]}};
+const summary=ctx.summarizeLinkGroup([a,b],w=>logs[w.id],x=>x,now);assert.equal(summary.month,10);assert.equal(summary.today,10);assert.equal(summary.records.length,3);assert.equal(summary.balance,15);assert.equal(JSON.stringify([a,b]),snapshot);
+assert.equal(ctx.linkGroups([a,b]).length,1);assert.equal(ctx.linkGroups([a,{...b,linkAccount:'other'}]).length,2);
+const account=ctx.summarizeLinkGroup([{...a,last:{at:now,acct:true,today:7,month:11,rem:15}},{...b,last:{at:now-1,acct:true,today:7,month:11,rem:15}}],()=>({rows:[]}),x=>x,now);assert.equal(account.month,11);assert.equal(account.today,7);assert.equal(account.balance,15);
+const sameTimestamp=ctx.summarizeLinkGroup([a],()=>({rows:[[now,2,'m','different-1'],[now,2,'m','different-2']]}),x=>x,now);assert.equal(sameTimestamp.today,4);
+const legacy=ctx.summarizeLinkGroup([a,b],()=>({rows:[[now,2,'m']]}),x=>x,now);assert.equal(legacy.source,'legacy-reference');assert.equal(legacy.month,20);assert.equal(legacy.partial,true);
+const missingCache=ctx.summarizeLinkGroup([a,b],()=>({rows:[]}),x=>x,now);assert.equal(missingCache.month,20);assert.equal(missingCache.source,'legacy-reference');
+const mixedCurrency=ctx.summarizeLinkGroup([{...a,cur:'CNY'},b],w=>({rows:w.id==='A'?[[now,7,'m','a']]:[[now,1,'m','b']]}),(v,c)=>c==='CNY'?v/7:v,now);assert.equal(mixedCurrency.month,2);
+console.log('PASS: shared balance counted once; request-ID union; distinct requests retained; per-key multipliers preserved; separate account groups; authoritative totals; legacy uncertainty; mixed currency');

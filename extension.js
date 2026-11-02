@@ -4,7 +4,7 @@
 // Adapted from the owner's installed, disabled Mallang receipt extension.
 // Original source stays outside this package. Only this shadow view is mounted.
 const RECEIPT_STORAGE_ID = extensionApi.extension.id;
-const RECEIPT_CSS = ":host{display:block;color:var(--foreground,#28252b);font:14px/1.6 system-ui,-apple-system,\"Noto Sans KR\",sans-serif}\n*{box-sizing:border-box}.receipt-scope{--ink:var(--foreground,#28252b);--ink-2:var(--foreground,#433e48);--mut:var(--muted-foreground,#7d7581);--page:var(--background,#faf8f9);--card:var(--card,#fff);--card-2:var(--muted,#f3eff2);--hair:var(--border,#e8dfe5);--line:var(--border,#d8cbd4);--fill:#a04d73;--on-fill:#fff;--serif:system-ui,sans-serif;--mono:ui-monospace,monospace;--ok:#579378;--brass:#a04d73;padding:28px 24px 60px}\n.mlh-root{max-width:1200px;margin:auto;color:var(--ink);font:inherit}.mlh-receipt-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap}.mlh-receipt-heading strong{font-size:25px;letter-spacing:-.04em}.mlh-receipt-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:22px;align-items:start}.mlh-slot{min-width:0}.mlh-slot:first-child{grid-row:span 4}.mlh-card{border:1px solid var(--hair);border-radius:18px;background:var(--card);overflow:hidden;box-shadow:0 3px 16px #36213205}.mlh-card-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;gap:10px;border-bottom:1px solid var(--hair)}.mlh-card-title{font-size:14px;margin:0;font-weight:650}\nbutton,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer;touch-action:manipulation}button:disabled{opacity:.5;cursor:wait}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #b1678a;outline-offset:2px}button{background:var(--card);border:1px solid var(--hair);border-radius:9px;padding:7px 11px;min-height:36px}.mlh-link{border:0;background:transparent;padding:4px 6px;color:#a05277}.mlh-input{background:var(--page);border:1px solid var(--hair);border-radius:8px;padding:9px 10px;width:100%;min-width:0}input[type=checkbox]{width:auto}input[type=password]{font-family:var(--mono)}label{display:block;font-size:12px;color:var(--mut)}select{max-width:100%;min-width:0}.mlh-empty,.mlh-rc-note,.mlh-cr-sub,.mlh-cr-foot,.mlh-wxhint{font-size:12px;color:var(--mut);overflow-wrap:anywhere;padding:12px 0}.mlh-perr{color:#ba4d65}.mlh-pfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.mlh-pedit,.mlh-wedit,.mlh-rc-edit,.mlh-cre{padding:18px 22px;border-bottom:1px solid var(--hair);background:var(--page)}.mlh-pedit label,.mlh-wedit label{margin:10px 0 5px}.mlh-pedit p{font-size:12px}.mlh-chips{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}.mlh-chip{font-size:11px;min-height:32px}.mlh-chip[aria-pressed=true],button[aria-pressed=true]{background:#f4e6ed;color:#8e4566;border-color:#d9b5c7}\n.mlh-rc{padding:24px}.mlh-rc-head{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:.1em}.mlh-rc-head em{color:var(--mut);font-style:normal}.mlh-rc-big{display:flex;flex-direction:column;align-items:center;padding:32px 0 28px;gap:8px}.mlh-rc-big>span{font-size:11px;letter-spacing:.18em;color:var(--mut)}.mlh-rc-big>b{font:600 clamp(30px,4vw,44px)/1.25 var(--mono);letter-spacing:-.06em}.mlh-rc-big>em{font-size:12px;font-style:normal;color:var(--mut)}.mlh-rc-cut{border-top:1px dashed var(--line);margin:18px 0}.mlh-rc-line{display:flex;align-items:baseline;gap:8px;padding:8px 0;font-size:12px;flex-wrap:wrap}.mlh-rc-line>i{flex:1;border-bottom:1px dotted var(--hair)}.mlh-rc-line>b{font-family:var(--mono);font-size:12px}.mlh-rc-line>em{font-style:normal;color:var(--mut);font-size:10px}.mlh-rc-line u{text-decoration:none;color:#9c5578}.mlh-rc-sub{font-size:10px;letter-spacing:.1em;color:var(--mut);margin:14px 0 6px}.mlh-rc-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:20px;font-size:11px;color:var(--mut)}.mlh-rc-models,.mlh-rc-items{overflow-wrap:anywhere}.mlh-rc-site{padding:12px 0;border-top:1px solid var(--hair)}.mlh-rc-sitehead{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}.mlh-rc-prices{display:grid;gap:9px}.mlh-rc-prow{display:grid;grid-template-columns:minmax(90px,1fr) repeat(3,minmax(0,70px));gap:5px;align-items:center;font-size:11px}.mlh-rc-prow input{width:100%;min-width:0;padding:6px;font-size:11px}.mlh-rc-mul{display:flex;gap:6px;align-items:center}.mlh-rc-mul input{width:65px}\n.mlh-cr{padding:22px}.mlh-cr-brand{display:flex;align-items:center;gap:10px;margin-bottom:18px}.mlh-cr-brand>span{flex:1;display:flex;flex-direction:column;min-width:0}.mlh-cr-brand b{font-size:14px;overflow-wrap:anywhere}.mlh-cr-brand em{font-size:10px;font-style:normal;color:var(--mut)}.mlh-cr-big b{font:600 30px/1.4 var(--mono);letter-spacing:-.05em}.mlh-cr-big span{font-size:12px;color:var(--mut);margin-left:7px}.mlh-cr-won{font-size:12px;color:var(--mut);margin-top:5px}.mlh-cr-bar{height:5px;background:var(--card-2);border-radius:20px;margin:18px 0;overflow:hidden}.mlh-cr-bar i{display:block;height:100%;background:#b17390}.mlh-cr-foot{border-top:1px solid var(--hair);margin-top:15px}.mlh-cr-ico{width:29px;height:29px;border-radius:9px;background:#edd5e1;display:block}.mlh-wxset{margin:10px 0}.mlh-ptl{display:block;margin-bottom:5px}.mlh-wxrow,.mlh-pgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.mlh-dialog{background:var(--card);color:var(--ink);border:1px solid var(--hair);border-radius:12px;padding:20px;max-width:95%}\n.mlh-ptools{padding:18px 22px;border-bottom:1px solid var(--hair);background:var(--page);overflow-wrap:anywhere}.mlh-rc-prices>label{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,76px) minmax(0,76px);gap:6px;align-items:center}.mlh-rc-prices>label.is-call{grid-template-columns:minmax(0,1fr) minmax(0,95px)}.mlh-rc-prices>label>span{overflow-wrap:anywhere}.mlh-cr-tag{font-size:11px;color:var(--mut);overflow-wrap:anywhere;margin:8px 0}.mlh-ptools textarea{width:100%;max-width:100%}.mlh-ptools small{overflow-wrap:anywhere}.mlh-wxset>span{line-height:1.5}.mlh-ptools>div{max-width:100%}\n[data-theme=dark]{--fill:#dc9fbd;--brass:#dc9fbd}.receipt-scope[data-theme=dark]{--page:var(--background,#151318);--card:var(--card,#211d24);--card-2:#302833;--ink:var(--foreground,#eee6ed);--mut:var(--muted-foreground,#aca0ae);--hair:var(--border,#3e3442);--line:#57465b}\n@media(max-width:700px){.receipt-scope{padding:22px 14px 50px}.mlh-receipt-grid{grid-template-columns:minmax(0,1fr);gap:16px}.mlh-slot:first-child{grid-row:auto}.mlh-receipt-heading strong{font-size:21px}.mlh-rc,.mlh-cr{padding:20px}.mlh-card-head{padding:16px 20px}.mlh-rc-prow{grid-template-columns:minmax(75px,1fr) repeat(3,minmax(0,60px))}.mlh-receipt-heading button{min-height:42px}}\n";
+const RECEIPT_CSS = ":host{display:block;color:var(--foreground,#28252b);font:14px/1.6 system-ui,-apple-system,\"Noto Sans KR\",sans-serif}\n.sorr-link-profiles,.sorr-link-balance{margin-top:18px;padding-top:14px;border-top:1px solid var(--hair)}summary{cursor:pointer;font-size:12px;font-weight:600}.sorr-link-key-profile{margin-top:12px}.sorr-link-key-profile .mlh-cr-big,.sorr-link-key-profile .mlh-cr-won,.sorr-link-key-profile label:has([data-cr=rbal]){display:none}.sorr-link-key-profile .mlh-card{box-shadow:none;border-radius:12px}.sorr-link-key-profile .mlh-cr-brand{display:none}.sorr-link-key-profile .mlh-cr{padding-top:8px}.sorr-link-balance label{margin:10px 0}\n*{box-sizing:border-box}.receipt-scope{--ink:var(--foreground,#28252b);--ink-2:var(--foreground,#433e48);--mut:var(--muted-foreground,#7d7581);--page:var(--background,#faf8f9);--card:var(--card,#fff);--card-2:var(--muted,#f3eff2);--hair:var(--border,#e8dfe5);--line:var(--border,#d8cbd4);--fill:#a04d73;--on-fill:#fff;--serif:system-ui,sans-serif;--mono:ui-monospace,monospace;--ok:#579378;--brass:#a04d73;padding:28px 24px 60px}\n.mlh-root{max-width:1200px;margin:auto;color:var(--ink);font:inherit}.mlh-receipt-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:24px;flex-wrap:wrap}.mlh-receipt-heading strong{font-size:25px;letter-spacing:-.04em}.mlh-receipt-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr);gap:22px;align-items:start}.mlh-slot{min-width:0}.mlh-slot:first-child{grid-row:span 4}.mlh-card{border:1px solid var(--hair);border-radius:18px;background:var(--card);overflow:hidden;box-shadow:0 3px 16px #36213205}.mlh-card-head{display:flex;align-items:center;justify-content:space-between;padding:18px 22px;gap:10px;border-bottom:1px solid var(--hair)}.mlh-card-title{font-size:14px;margin:0;font-weight:650}\nbutton,input,select,textarea{font:inherit;color:inherit}button{cursor:pointer;touch-action:manipulation}button:disabled{opacity:.5;cursor:wait}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #b1678a;outline-offset:2px}button{background:var(--card);border:1px solid var(--hair);border-radius:9px;padding:7px 11px;min-height:36px}.mlh-link{border:0;background:transparent;padding:4px 6px;color:#a05277}.mlh-input{background:var(--page);border:1px solid var(--hair);border-radius:8px;padding:9px 10px;width:100%;min-width:0}input[type=checkbox]{width:auto}input[type=password]{font-family:var(--mono)}label{display:block;font-size:12px;color:var(--mut)}select{max-width:100%;min-width:0}.mlh-empty,.mlh-rc-note,.mlh-cr-sub,.mlh-cr-foot,.mlh-wxhint{font-size:12px;color:var(--mut);overflow-wrap:anywhere;padding:12px 0}.mlh-perr{color:#ba4d65}.mlh-pfoot{display:flex;justify-content:flex-end;gap:8px;margin-top:18px}.mlh-pedit,.mlh-wedit,.mlh-rc-edit,.mlh-cre{padding:18px 22px;border-bottom:1px solid var(--hair);background:var(--page)}.mlh-pedit label,.mlh-wedit label{margin:10px 0 5px}.mlh-pedit p{font-size:12px}.mlh-chips{display:flex;flex-wrap:wrap;gap:5px;margin:8px 0}.mlh-chip{font-size:11px;min-height:32px}.mlh-chip[aria-pressed=true],button[aria-pressed=true]{background:#f4e6ed;color:#8e4566;border-color:#d9b5c7}\n.mlh-rc{padding:24px}.mlh-rc-head{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-family:var(--mono);font-size:10px;letter-spacing:.1em}.mlh-rc-head em{color:var(--mut);font-style:normal}.mlh-rc-big{display:flex;flex-direction:column;align-items:center;padding:32px 0 28px;gap:8px}.mlh-rc-big>span{font-size:11px;letter-spacing:.18em;color:var(--mut)}.mlh-rc-big>b{font:600 clamp(30px,4vw,44px)/1.25 var(--mono);letter-spacing:-.06em}.mlh-rc-big>em{font-size:12px;font-style:normal;color:var(--mut)}.mlh-rc-cut{border-top:1px dashed var(--line);margin:18px 0}.mlh-rc-line{display:flex;align-items:baseline;gap:8px;padding:8px 0;font-size:12px;flex-wrap:wrap}.mlh-rc-line>i{flex:1;border-bottom:1px dotted var(--hair)}.mlh-rc-line>b{font-family:var(--mono);font-size:12px}.mlh-rc-line>em{font-style:normal;color:var(--mut);font-size:10px}.mlh-rc-line u{text-decoration:none;color:#9c5578}.mlh-rc-sub{font-size:10px;letter-spacing:.1em;color:var(--mut);margin:14px 0 6px}.mlh-rc-foot{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:20px;font-size:11px;color:var(--mut)}.mlh-rc-models,.mlh-rc-items{overflow-wrap:anywhere}.mlh-rc-site{padding:12px 0;border-top:1px solid var(--hair)}.mlh-rc-sitehead{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:8px}.mlh-rc-prices{display:grid;gap:9px}.mlh-rc-prow{display:grid;grid-template-columns:minmax(90px,1fr) repeat(3,minmax(0,70px));gap:5px;align-items:center;font-size:11px}.mlh-rc-prow input{width:100%;min-width:0;padding:6px;font-size:11px}.mlh-rc-mul{display:flex;gap:6px;align-items:center}.mlh-rc-mul input{width:65px}\n.mlh-cr{padding:22px}.mlh-cr-brand{display:flex;align-items:center;gap:10px;margin-bottom:18px}.mlh-cr-brand>span{flex:1;display:flex;flex-direction:column;min-width:0}.mlh-cr-brand b{font-size:14px;overflow-wrap:anywhere}.mlh-cr-brand em{font-size:10px;font-style:normal;color:var(--mut)}.mlh-cr-big b{font:600 30px/1.4 var(--mono);letter-spacing:-.05em}.mlh-cr-big span{font-size:12px;color:var(--mut);margin-left:7px}.mlh-cr-won{font-size:12px;color:var(--mut);margin-top:5px}.mlh-cr-bar{height:5px;background:var(--card-2);border-radius:20px;margin:18px 0;overflow:hidden}.mlh-cr-bar i{display:block;height:100%;background:#b17390}.mlh-cr-foot{border-top:1px solid var(--hair);margin-top:15px}.mlh-cr-ico{width:29px;height:29px;border-radius:9px;background:#edd5e1;display:block}.mlh-wxset{margin:10px 0}.mlh-ptl{display:block;margin-bottom:5px}.mlh-wxrow,.mlh-pgrid{display:grid;grid-template-columns:1fr 1fr;gap:9px}.mlh-dialog{background:var(--card);color:var(--ink);border:1px solid var(--hair);border-radius:12px;padding:20px;max-width:95%}\n.mlh-ptools{padding:18px 22px;border-bottom:1px solid var(--hair);background:var(--page);overflow-wrap:anywhere}.mlh-rc-prices>label{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,76px) minmax(0,76px);gap:6px;align-items:center}.mlh-rc-prices>label.is-call{grid-template-columns:minmax(0,1fr) minmax(0,95px)}.mlh-rc-prices>label>span{overflow-wrap:anywhere}.mlh-cr-tag{font-size:11px;color:var(--mut);overflow-wrap:anywhere;margin:8px 0}.mlh-ptools textarea{width:100%;max-width:100%}.mlh-ptools small{overflow-wrap:anywhere}.mlh-wxset>span{line-height:1.5}.mlh-ptools>div{max-width:100%}\n[data-theme=dark]{--fill:#dc9fbd;--brass:#dc9fbd}.receipt-scope[data-theme=dark]{--page:var(--background,#151318);--card:var(--card,#211d24);--card-2:#302833;--ink:var(--foreground,#eee6ed);--mut:var(--muted-foreground,#aca0ae);--hair:var(--border,#3e3442);--line:#57465b}\n@media(max-width:700px){.receipt-scope{padding:22px 14px 50px}.mlh-receipt-grid{grid-template-columns:minmax(0,1fr);gap:16px}.mlh-slot:first-child{grid-row:auto}.mlh-receipt-heading strong{font-size:21px}.mlh-rc,.mlh-cr{padding:20px}.mlh-card-head{padding:16px 20px}.mlh-rc-prow{grid-template-columns:minmax(75px,1fr) repeat(3,minmax(0,60px))}.mlh-receipt-heading button{min-height:42px}}\n";
 function mountReceipt(host) {
   const realDocument=globalThis.document;
   const shadow=host.shadowRoot;
@@ -1289,7 +1289,7 @@ function localizeReceiptUI(root){
   /* ── 🧾 API 영수증 + 💳 크레딧(구글 클라우드 · 중계 API 잔액) ──
      영수증: 채팅 메시지(리롤 포함)에 마리나라가 적어 둔 토큰 수를 모아서, 내가 적은 모델 단가로 금액 계산
      크레딧: 구글 클라우드 = 내가 적은 잔액 − 그 뒤로 구글 모델에 쓴 예상 금액 / 중계 API = 키로 잔액 조회 */
-  const AP_PAGE = 100, AP_DAYS_MAX = 92, AP_STALE = 10 * 60000, CR_MAX = 4;
+  const AP_PAGE = 100, AP_DAYS_MAX = 92, AP_STALE = 10 * 60000, CR_MAX = 10;
   const SEP = "␟";
   // price: "사이트␟모델" → [입력, 출력] (그 사이트 통화, 100만 토큰당) · 옛 키("모델"만)는 달러로 모든 사이트에
   // siteCur: 사이트별 단가 통화 · disp: 영수증 표시 통화 · fx/fxc: 손으로 적은 환율(비우면 매일 받아 온 환율)
@@ -1508,6 +1508,7 @@ function localizeReceiptUI(root){
       if (button) button.disabled = ap.busy;
     }
     if (progressOnly || drag || adrag || arranging) return;
+    if(wid().some(isLinkCard)){render();return;}
     for (const w of wid()) {
       if ((w.kind !== "rcpt" && w.kind !== "credit") || widEdit === w.id) continue;
       const slot = [...root.querySelectorAll(".mlh-slot[data-card]")].find((el) => el.dataset.card === String(w.id));
@@ -1651,6 +1652,52 @@ function localizeReceiptUI(root){
     } catch (e) { w.lp = { at: Date.now(), rows: w.lp?.rows || null, n: w.lp?.n || 0, err: errText(e) }; }
     savePrefs(); render();
   }
+// Pure grouping helpers. Request IDs, not equal timestamps or costs, identify duplicate charges.
+function isLinkCard(w){try{const h=new URL(w.url).hostname.toLowerCase();return w.kind==='credit'&&w.mode==='relay'&&/^(?:[a-z0-9-]+\.)*linkapi\.(?:ai|cc|pro)$/.test(h)}catch{return false}}
+function linkGroupKey(w){return String(w.linkAccount||'default').trim()||'default'}
+function linkGroups(cards){const groups=new Map();for(const w of cards)if(isLinkCard(w)){const k=linkGroupKey(w);if(!groups.has(k))groups.set(k,[]);groups.get(k).push(w)}return [...groups].map(([key,members])=>({key,members}))}
+function summarizeLinkGroup(members,readLog,convert,now=Date.now()){
+ const candidates=members.filter(w=>w.last&&!w.last.err).sort((a,b)=>(b.last.at||0)-(a.last.at||0));
+ const accounts=candidates.filter(w=>w.last.acct);const latest=accounts[0];
+ const day=new Date(now);day.setHours(0,0,0,0);const month=new Date(now);month.setDate(1);month.setHours(0,0,0,0);
+ const unique=new Map();let legacy=false,covered=false;
+ for(const w of members){const cache=readLog(w);if(w.last?.src==='logs'&&cache?.linkSchema===2)covered=true;for(const row of cache?.rows||[]){if(!row[3]){legacy=true;continue}const id=String(row[3]);if(!unique.has(id))unique.set(id,{at:row[0],usd:convert(Number(row[1])||0,w.cur==='CNY'?'CNY':'USD'),model:row[2],id})}}
+ const records=[...unique.values()];const since=t=>records.filter(r=>r.at>=t).reduce((sum,r)=>sum+r.usd,0);
+ const known=x=>typeof x==='number'&&Number.isFinite(x)&&x>=0;
+ let today=null,totalMonth=null,source='missing';
+ if(latest&&known(latest.last.today)&&known(latest.last.month)){today=convert(latest.last.today,latest.cur==='CNY'?'CNY':'USD');totalMonth=convert(latest.last.month,latest.cur==='CNY'?'CNY':'USD');source='account'}
+ else if(records.length||covered&&!legacy){today=since(day.getTime());totalMonth=since(month.getTime());source='logs'}
+ else if(candidates.some(w=>known(w.last.today)&&known(w.last.month))){const w=candidates.find(w=>known(w.last.today)&&known(w.last.month));today=convert(w.last.today,w.cur==='CNY'?'CNY':'USD');totalMonth=convert(w.last.month,w.cur==='CNY'?'CNY':'USD');source='legacy-reference'}
+ let balance=null,balanceSource='missing';
+ const balanceCard=accounts.find(w=>known(w.last.rem))||candidates.find(w=>known(w.last.rem));
+ if(balanceCard){balance=convert(balanceCard.last.rem,balanceCard.cur==='CNY'?'CNY':'USD');balanceSource=balanceCard.last.acct?'account':'legacy-reference'}
+ return {today,month:totalMonth,source,balance,balanceSource,records,legacy,partial:(legacy||members.some(w=>w.last?.logCapped||w.last?.err||w.last?.src!=='logs'))&&source!=='account'};
+}
+
+function linkSummary(group){return summarizeLinkGroup(group.members,relayLogStore,toUSD)}
+function linkBalance(group,s){
+ const config=prefs.sorrLinkBalances?.[group.key];
+ if(s.balanceSource==='account')return {value:s.balance,source:'계정 전체 잔액 · 한 번만 표시'};
+ if(config&&Number.isFinite(config.amount)){
+  const known=new Set(config.knownIds||[]);const spent=s.records.filter(r=>r.at>=config.at&&!known.has(r.id)).reduce((sum,r)=>sum+r.usd,0);
+  return {value:Math.max(0,toUSD(config.amount,config.currency)-spent),source:'공유 기준 잔액 − 이후 조회된 사용 로그 · 추정'};
+ }
+ return {value:s.balance,source:s.balance===null?'현재 잔액을 입력해 주세요.':'기존 카드의 참고 잔액 · 아래에 공유 기준 잔액을 입력해 주세요.'};
+}
+function linkGroupHTML(group){
+ const s=linkSummary(group),balance=linkBalance(group,s);const config=prefs.sorrLinkBalances?.[group.key];const cur=config?.currency||(group.members[0].cur==='CNY'?'CNY':'USD');
+ const money=v=>v===null?'확인 전':fmtCur(fromUSD(v,cur),cur);const groupName=group.key==='default'?'LinkAPI · 공유 계정':'LinkAPI · '+group.key;
+ return `<section class="mlh-card sorr-link-account" data-link-group="${esc(group.key)}"><div class="mlh-card-head"><h2 class="mlh-card-title">${esc(groupName)}</h2><button class="mlh-link" data-link-refresh="${esc(group.key)}">전체 조회</button></div><div class="mlh-cr"><div class="mlh-cr-big"><b>${money(balance.value)}</b></div><div class="mlh-cr-sub">${esc(balance.source)}</div><div class="mlh-rc-line"><span>오늘 사용액</span><i></i><b>${money(s.today)}</b></div><div class="mlh-rc-line"><span>이번 달 사용액</span><i></i><b>${money(s.month)}</b></div><p class="mlh-cr-tag">${s.source==='account'?'계정 집계 한 번만 반영':s.source==='logs'?'요청 ID로 중복 제거한 사용 로그':s.source==='legacy-reference'?'이전 대표 조회값 · 전체 조회 후 중복 제거 집계로 전환':'아직 조회된 사용량이 없어요.'}${s.partial?' · 조회 범위가 일부이거나 미조회 키가 있을 수 있어요.':''}</p><details class="sorr-link-balance"><summary>공유 잔액 기준 설정</summary><p class="mlh-empty">사이트에 표시된 계정 잔액을 한 번 입력하세요. 이후 조회된 사용액만 차감하며, 키별 잔액은 합산하지 않아요.</p><label>현재 계정 잔액<input class="mlh-input" type="number" min="0" step="any" data-shared-balance value="${config?esc(config.amount):''}" placeholder="사이트의 현재 잔액"></label><label>통화<select class="mlh-input" data-shared-currency><option value="CNY" ${cur==='CNY'?'selected':''}>CNY · 위안</option><option value="USD" ${cur==='USD'?'selected':''}>USD · 달러</option></select></label><button data-link-save="${esc(group.key)}">공유 잔액 저장</button></details><details class="sorr-link-profiles" ${group.members.some(w=>widEdit===w.id)?'open':''}><summary>키별 설정 · ${group.members.length}개 · 배율은 각각 유지</summary>${group.members.map(w=>`<div class="sorr-link-key-profile">${creditHTML(w).replace('<h2 class="mlh-card-title">크레딧 잔액</h2>','<h2 class="mlh-card-title">'+esc(w.name||'LinkAPI 키')+'</h2>')}</div>`).join('')}</details></div></section>`;
+}
+function receiptCardsHTML(cards){const groups=linkGroups(cards),seen=new Set();return cards.map(w=>{if(isLinkCard(w)){const key=linkGroupKey(w);if(seen.has(key))return '';seen.add(key);return `<div class="mlh-slot" data-card="link:${esc(key)}">${linkGroupHTML(groups.find(g=>g.key===key))}</div>`}return `<div class="mlh-slot" data-card="${esc(w.id)}">${widHTML(w)}</div>`}).join('')}
+function linkGroupAction(t){
+ const action=t.closest('[data-link-refresh],[data-link-save]');if(!action)return false;
+ const key=action.dataset.linkRefresh??action.dataset.linkSave,group=linkGroups(wid()).find(g=>g.key===key);if(!group)return true;
+ if(action.hasAttribute('data-link-refresh')){for(const w of group.members)void crLookup(w);return true}
+ const card=action.closest('.sorr-link-account'),raw=card.querySelector('[data-shared-balance]').value,value=Number(raw);if(raw===''||!Number.isFinite(value)||value<0){card.querySelector('[data-shared-balance]').focus();return true}
+ const s=linkSummary(group);prefs.sorrLinkBalances={...(prefs.sorrLinkBalances||{}),[key]:{amount:value,currency:card.querySelector('[data-shared-currency]').value,at:Date.now(),knownIds:s.records.map(r=>r.id)}};savePrefs();render();return true;
+}
+
   let relayMemo = { key: "", list: [] };
   function relayFor(m) {
     const ws = wid().filter((x) => x.kind === "credit" && x.mode === "relay" && x.url);
@@ -1708,12 +1755,13 @@ function localizeReceiptUI(root){
     if (gm) for (const [m, r] of Object.entries(gm)) if (r[0] + r[1] > 0) out.push({ name: m, site: "Vertex AI", src: "G", cost: apCost("google_vertex" + SEP + m, r[0], r[1]), tok: r[0] + r[1] });
     const logged = [];
     for (const w of wid()) {
-      if (w.kind !== "credit" || w.mode !== "relay" || w.last?.src !== "logs") continue;
+      if (w.kind !== "credit" || w.mode !== "relay" || isLinkCard(w) || w.last?.src !== "logs") continue;
       logged.push(w);
       const st = relayLogStore(w), by = {};
       for (const [t, q, mdl] of st.rows) if (t >= t0) { const x = by[mdl || "?"] || (by[mdl || "?"] = { q: 0, n: 0 }); x.q += q; x.n++; }
       for (const [mdl, x] of Object.entries(by)) out.push({ name: mdl, site: w.name || hostOf(w.url), src: "site", cost: toUSD(x.q, w.cur === "CNY" ? "CNY" : "USD"), n: x.n });
     }
+    for(const g of linkGroups(wid())){const s=linkSummary(g);if(s.source!=='logs'&&s.source!=='account')continue;logged.push(...g.members);const by={};for(const r of s.records){if(r.at<t0)continue;const x=by[r.model||'?']||(by[r.model||'?']={cost:0,n:0});x.cost+=r.usd;x.n++;}for(const [name,x] of Object.entries(by))out.push({name,site:'LinkAPI · 공유 계정',src:'site',cost:x.cost,n:x.n});}
     const nanoW = wid().filter((x) => x.kind === "credit" && x.mode === "nano" && x.last?.nu);
     for (const w of nanoW) for (const [mdl, r] of Object.entries(w.last.nu.days[w.last.nu.today] || {})) out.push({ name: mdl, site: w.name || "NanoGPT", src: "site", cost: r.c, n: r.n, tok: r.i + r.o + r.th });
     const chat = {};
@@ -1743,7 +1791,7 @@ function localizeReceiptUI(root){
         for (const [m, x] of Object.entries(H)) { if (!(pairs.has(apProv(m) + SEP + nm(apModelName(m))) || anyP.has(apProv(m)))) continue; const R2 = rows[apProv(m)]; if (!R2 || apProv(m) === "google_vertex") continue; const c = apCost(m, x[0], x[1], x[2]) || 0; R2.m -= c; if (t >= t0) R2.t -= c; R2.mn -= x[2]; if (c === 0 && apCost(m, x[0], x[1], x[2]) == null) R2.un -= x[2]; } }
     }
     for (const w of wid()) {
-      if (w.kind !== "credit" || w.mode !== "relay" || !w.last || !(w.last.acct || w.last.trk)) continue;
+      if (w.kind !== "credit" || w.mode !== "relay" || isLinkCard(w) || !w.last || !(w.last.acct || w.last.trk)) continue;
       if (!relayConns(w).length) continue;
       const cur = w.cur === "CNY" ? "CNY" : "USD", hit = relayMatcher(w), PR = relayPeriods(w) || {};
       // 이 사이트로 보낸 채팅 몫은 종류별 칸에서 빼고, 사이트가 센 금액으로 따로 한 줄
@@ -1752,6 +1800,13 @@ function localizeReceiptUI(root){
         for (const [m, r] of Object.entries(H)) { if (!hit(m)) continue; const c = apCost(m, r[0], r[1], r[2]) || 0, R2 = rows[apProv(m)]; if (!R2) continue; R2.m -= c; if (t >= t0) R2.t -= c; R2.mn -= r[2]; } }
       const r = row("relay:" + w.id);
       r.name = w.name || hostOf(w.url) || "Relay"; r.src = "site"; r.m = toUSD(PR.month || 0, cur); r.t = toUSD(PR.today || 0, cur);
+    }
+    const sharedGroups=linkGroups(wid()).map(g=>({...g,summary:linkSummary(g)})).filter(g=>g.summary.today!==null&&g.summary.month!==null);
+    const removed=new Set();
+    for(const g of sharedGroups){
+      const matchers=g.members.map(relayMatcher);
+      for(const [k,H] of Object.entries(ap.hours)){const stamp=Date.parse(k+":00:00");if(stamp<m0)continue;for(const [m,x] of Object.entries(H)){const key=k+'|'+m;if(removed.has(key)||!matchers.some(hit=>hit(m)))continue;removed.add(key);const r=rows[apProv(m)];if(!r)continue;const cost=apCost(m,x[0],x[1],x[2])||0;r.m-=cost;if(stamp>=t0)r.t-=cost;r.mn-=x[2];if(apCost(m,x[0],x[1],x[2])==null)r.un-=x[2];}}
+      const r=row('link:'+g.key);r.name=g.key==='default'?'LinkAPI · 공유 계정':'LinkAPI · '+g.key;r.src='site';r.m=g.summary.month;r.t=g.summary.today;
     }
     for (const w of wid()) {
       if (w.kind !== "credit" || w.mode !== "nano" || !w.last || w.last.today == null) continue;
@@ -1820,7 +1875,7 @@ function localizeReceiptUI(root){
         ${A.list.length ? `<div class="mlh-rc-cut"></div><div class="mlh-rc-sub">BY SITE · MONTH (today)</div><div class="mlh-rc-items">${A.list.map((r) => line((tag[r.src] ? `<u>${tag[r.src].trim()}</u> ` : "") + esc(r.name), show(r.m), show(r.t))).join("")}</div>` : ""}
         ${(() => {
           // 구독은 정액이라 금액 합계에는 안 넣고, 얼마나 썼는지만 따로
-          const subs = wid().filter((x) => x.kind === "credit" && x.mode === "nano" && x.last?.sub);
+          const subs = wid().filter((x) => x.kind === "credit" && x.mode === "nano" && x.last?.sub?.active===true);
           if (!subs.length) return "";
           const pc = (x) => { if (!x) return null; const lim = Number(x.lim) || (Number(x.used) + Number(x.rem)) || 0, used = Number(x.used) || 0; const p = x.pct != null ? Number(x.pct) * (Number(x.pct) <= 1 ? 100 : 1) : lim ? used / lim * 100 : 0; return { p: Math.round(Math.min(100, p)), used }; };
           return `<div class="mlh-rc-cut"></div><div class="mlh-rc-sub">SUBSCRIPTIONS · USED (flat fee, not in the total)</div><div class="mlh-rc-items">${subs.map((x) => { const S = x.last.sub, d = pc(S.d), wk = pc(S.wk), nmx = esc(x.name || "NanoGPT");
@@ -1959,7 +2014,7 @@ function localizeReceiptUI(root){
   }
   async function crLookup(w) {
     if (w.busy) return;
-    w.busy = true; render();
+    w.busy = true; if(isLinkCard(w))w.sorrLinkRevision=2; render();
     try {
       if (w.mode === "gc") {
         if (!hasG(w)) return;
@@ -2102,7 +2157,7 @@ function localizeReceiptUI(root){
         let logInfo = "", logN = 0;
         try {
           const qpu = await relayQpu(w, base);
-          const store = relayLogStore(w), before = store.rows.length;
+          const store = relayLogStore(w); if(isLinkCard(w)&&store.linkSchema!==2){store.legacyRows=store.rows;store.rows=[];store.ids={};delete store.first0;store.linkSchema=2;} const before = store.rows.length;
           let capped = false, okAny = false, lastErr = "";
           for (const k of keys) {
             let j = null;
@@ -2122,7 +2177,7 @@ function localizeReceiptUI(root){
               const t = (Number(r.created_at) || 0) * 1000; if (!t) continue;
               const id = String(r.id ?? `${r.created_at}:${r.quota}:${r.model_name}:${r.prompt_tokens}`);
               if (store.ids[id]) continue; store.ids[id] = 1;
-              store.rows.push([t, (Number(r.quota) || 0) / qpu, String(r.model_name || "")]);
+              store.rows.push([t, (Number(r.quota) || 0) / qpu, String(r.model_name || ""),r.id==null?null:String(r.id)]);
             }
           }
           if (!okAny) throw new Error(lastErr || "no logs");
@@ -2140,7 +2195,7 @@ function localizeReceiptUI(root){
         } catch (e) { logInfo = "usage log: " + errText(e); }
         // 실시간 단가표 (6시간마다)
         if (!w.lp || Date.now() - (w.lp.at || 0) > 6 * 3600000) relayPricing(w, base).catch(() => {});
-        w.last = { at: Date.now(), trk: true, src, used: U, today, month, daySince, monthSince, rem, total: rem != null ? Number(w.rbal) : null, acctErr, logInfo };
+        w.last = { at: Date.now(), trk: true, src, logCapped:src==='logs'&&(daySince>t0||monthSince>m0), used: U, today, month, daySince, monthSince, rem, total: rem != null ? Number(w.rbal) : null, acctErr, logInfo };
       } catch (e) { w.last = { at: Date.now(), err: (acctErr ? acctErr + " · " : "") + "Key: " + errText(e) }; }
     } finally { w.busy = false; savePrefs(); render(); }
   }
@@ -2151,7 +2206,7 @@ function localizeReceiptUI(root){
       if (w.kind !== "credit" || w.busy) continue;
       const ready = w.mode === "relay" ? w.url && (w.key || w.tok) : w.mode === "ds" || w.mode === "or" ? w.key || w.mgmt : w.mode === "nano" ? w.key || w.conn || (data.conns || []).some((c) => /nano/i.test(String(c.provider || ""))) : w.at && (w.sa || (hasG(w) && oValid(w)));
       const last = w.mode === "gc" ? w.mon?.chk || 0 : w.last?.at || 0;
-      if (ready && Date.now() - last > 30 * 60000) crLookup(w);
+      if (ready && (Date.now() - last > 30 * 60000 || isLinkCard(w)&&w.sorrLinkRevision!==2)) crLookup(w);
     }
   }
   const tm = (t) => new Date(t).toLocaleTimeString("ko-KR", { hour: "numeric", minute: "2-digit" });
@@ -2205,7 +2260,7 @@ function localizeReceiptUI(root){
     } else if (mode === "nano") {
       const L = w.last || {};
       if (L.bal >= 0) { rem = L.bal; total = 0; }
-      const S = L.sub, bar = (x, label) => {
+      const S = L.sub?.active===true?L.sub:null, bar = (x, label) => {
         if (!x) return "";
         const lim = Number(x.lim) || (Number(x.used) + Number(x.rem)) || 0, used = Number(x.used) || 0;
         const pct = x.pct != null ? Number(x.pct) * (Number(x.pct) <= 1 ? 100 : 1) : lim ? used / lim * 100 : 0;
@@ -2240,7 +2295,7 @@ function localizeReceiptUI(root){
     } else { err = w.last?.err || ""; chk = w.last?.at || 0; }
     const pct = rem != null && total > 0 ? Math.max(0, Math.min(100, rem / total * 100)) : 0;
     const title = esc(w.name || (mode === "gc" ? "Google Cloud" : mode === "nano" ? "NanoGPT" : mode === "ds" ? "DeepSeek" : mode === "or" ? "OpenRouter" : "API Credit"));
-    const tag = mode === "gc" ? `FREE TRIAL · ${KRW ? (Number(w.tot) ? money(Number(w.tot)) : "₩") : "$" + (Number(w.tot) || 300)}` : mode === "nano" ? "BALANCE · SUBSCRIPTION" : mode === "ds" ? "BALANCE · API.DEEPSEEK.COM" : mode === "or" ? "CREDITS · OPENROUTER.AI" : esc(String(w.url || "").replace(/^https?:\/\//, "").replace(/\/.*$/, "") || "RELAY API");
+    const tag = mode === "gc" ? `FREE TRIAL · ${KRW ? (Number(w.tot) ? money(Number(w.tot)) : "₩") : "$" + (Number(w.tot) || 300)}` : mode === "nano" ? (w.last?.sub?.active===true?"충전 잔액 · 활성 구독 별도 표시":"충전 잔액 · 종량제") : mode === "ds" ? "BALANCE · API.DEEPSEEK.COM" : mode === "or" ? "CREDITS · OPENROUTER.AI" : esc(String(w.url || "").replace(/^https?:\/\//, "").replace(/\/.*$/, "") || "RELAY API");
     const fld = (k, label, type, ph, ex = "") => `<label class="mlh-wxset"><span class="mlh-ptl">${label}</span><input class="mlh-input" type="${type}" data-fk="cr-${w.id}-${k}" data-cr="${k}" data-wid="${w.id}" value="${esc(w[k] ?? "")}" placeholder="${ph}" ${ex}></label>`;
     const nanoConns = (data.conns || []).filter((c) => /nano/i.test(String(c.provider || "")));
     const kinds = { gc: () => `${chips("Currency", "crgcur", w, "gcur", [["USD", "$"], ["KRW", "₩"]])}
@@ -2260,7 +2315,7 @@ function localizeReceiptUI(root){
           </div>
           ${hasG(w) ? "" : chips("Count", "crscope", w, "scope", [["vertex", "Vertex only"], ["google", "All Google"]])}
           <div class="mlh-empty">Each time you enter the balance, it starts counting again from now. Costs use the prices on the API receipt.</div>`,
-      relay: () => `${fld("url", "Site address", "url", "https://api.linkapi.ai", 'autocomplete="off"')}
+      relay: () => `${fld("linkAccount", "공유 계정 그룹 · 같은 계정 키는 같은 이름, 비우면 기본 계정", "text", "기본 계정")} ${fld("url", "Site address", "url", "https://api.linkapi.ai", 'autocomplete="off"')}
           ${fld("tok", "Access token (optional — some sites block it in the browser)", "password", "the long token from your account page", 'autocomplete="off"')}
           ${fld("uid", "User ID — shown on the same page", "text", "e.g. 1234", 'autocomplete="off" inputmode="numeric"')}
           ${fld("key", "API keys — every key you use with this site, separated by spaces", "password", "sk-aaa sk-bbb …", 'autocomplete="off"')}
@@ -2277,8 +2332,8 @@ function localizeReceiptUI(root){
           ${fld("rbal", "…or type the balance shown on OpenRouter once (then it counts down by itself)", "number", "e.g. 12.50", 'min="0" step="any" inputmode="decimal"')}
           <div class="mlh-empty">Today and this month come from each key's own usage numbers (UTC days). Checks every 30 min or with ↻.</div>`,
       nano: () => `${fld("key", "API keys — every NanoGPT key you use (agents too), separated by spaces. The first one is used for the balance.", "password", "your NanoGPT keys", 'autocomplete="off"')}
-          <label class="mlh-wxset"><span class="mlh-ptl">Subscription — read through this connection</span><select class="mlh-input" data-crconn="${w.id}"><option value="">Auto — ${nanoConns.length ? `${nanoConns.length} NanoGPT connection${nanoConns.length > 1 ? "s" : ""}` : "no NanoGPT connection"}</option>${nanoConns.map((c) => `<option value="${esc(c.id)}"${w.conn === c.id ? " selected" : ""}>${esc(c.name || c.model || c.id)}</option>`).join("")}</select></label>
-          <div class="mlh-empty">The subscription is read through Marinara, so no key is needed for it.</div>` };
+          <label class="mlh-wxset"><span class="mlh-ptl">구독 중인 경우만 · 구독 조회 연결(선택)</span><select class="mlh-input" data-crconn="${w.id}"><option value="">Auto — ${nanoConns.length ? `${nanoConns.length} NanoGPT connection${nanoConns.length > 1 ? "s" : ""}` : "no NanoGPT connection"}</option>${nanoConns.map((c) => `<option value="${esc(c.id)}"${w.conn === c.id ? " selected" : ""}>${esc(c.name || c.model || c.id)}</option>`).join("")}</select></label>
+          <div class="mlh-empty">충전식만 사용하면 구독 연결은 선택하지 않아도 돼요. 활성 구독이 확인될 때만 구독 사용량을 따로 표시합니다.</div>` };
     const tools = ed ? `<div class="mlh-ptools">${moveTools(w)}${chips("Type", "crmode", w, "mode", [["gc", "Google Cloud"], ["relay", "Relay API"], ["nano", "NanoGPT"], ["ds", "DeepSeek"], ["or", "OpenRouter"]])}
         ${fld("name", "Name", "text", title, 'maxlength="40"')}
         ${(kinds[mode] || kinds.gc)()}
@@ -2731,7 +2786,7 @@ function localizeReceiptUI(root){
     const btnKey = !fk && root.contains(ae) && ae instanceof HTMLElement && ae.matches("button[data-wa],button[data-cday],button[data-cnav],button[data-mus],button[data-wb],button[data-wxa]")
       ? ["wa", "wid", "v", "cday", "cnav", "mus", "wb", "wxa"].filter((k) => ae.dataset[k] != null).map((k) => `[data-${k}="${CSS.escape(ae.dataset[k])}"]`).join("") : "";
     const cards = wid().filter(w => w.kind === "rcpt" || w.kind === "credit");
-    root.innerHTML = `<div class="mlh-receipt-heading"><strong>소르 영수증 · 크레딧</strong><div>${cards.some(w => w.kind === "rcpt") ? "" : '<button type="button" data-wa="addrcpt">영수증 추가</button>'}${cards.filter(w => w.kind === "credit").length < CR_MAX ? '<button type="button" data-wa="addcredit">＋ 크레딧 추가</button>' : ""}</div></div><div class="mlh-receipt-grid">${cards.map(w => `<div class="mlh-slot" data-card="${esc(w.id)}">${widHTML(w)}</div>`).join("")}</div>`;
+    root.innerHTML = `<div class="mlh-receipt-heading"><strong>소르 영수증 · 크레딧</strong><div>${cards.some(w => w.kind === "rcpt") ? "" : '<button type="button" data-wa="addrcpt">영수증 추가</button>'}${cards.filter(w => w.kind === "credit").length < CR_MAX ? '<button type="button" data-wa="addcredit">＋ 크레딧 추가</button>' : ""}</div></div><div class="mlh-receipt-grid">${receiptCardsHTML(cards)}</div>`;
     localizeReceiptUI(root);
     fillStk();
     root.querySelectorAll(".mlh-pcap").forEach(fitCap);
@@ -2759,6 +2814,7 @@ function localizeReceiptUI(root){
   /* ── 이벤트 (위임) ── */
   function onClick(e) {
     const t = e.target instanceof Element ? e.target : null;
+    if(t&&root?.contains(t)&&linkGroupAction(t))return;
     if (t && playOpen && !root?.contains(t)) { playOpen = false; render(); }
     if (!t || !root?.contains(t)) return;
     const chat = t.closest(".mlh-chat");

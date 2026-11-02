@@ -1,6 +1,6 @@
 {
   "date": "2026-11-02",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "fixture": [
     {
       "profile": "pc",
@@ -13,6 +13,7 @@
       "overflow": false,
       "legacySpy": false,
       "reopenPreservesCards": true,
+      "maxCreditsTen": true,
       "closedViewStopsRequests": true,
       "errors": [],
       "paidGenerationCalls": 0
@@ -28,9 +29,34 @@
       "overflow": false,
       "legacySpy": false,
       "reopenPreservesCards": true,
+      "maxCreditsTen": true,
       "closedViewStopsRequests": true,
       "errors": [],
       "paidGenerationCalls": 0
+    }
+  ],
+  "accountUI": [
+    {
+      "profile": "pc",
+      "sharedCardCount": 1,
+      "keyProfiles": 2,
+      "requestDedupTotal": 10,
+      "nanoPrepaidIncluded": true,
+      "inactiveSubscriptionHidden": true,
+      "multipliersPreserved": true,
+      "sharedBalanceSaved": true,
+      "errors": []
+    },
+    {
+      "profile": "mobile",
+      "sharedCardCount": 1,
+      "keyProfiles": 2,
+      "requestDedupTotal": 10,
+      "nanoPrepaidIncluded": true,
+      "inactiveSubscriptionHidden": true,
+      "multipliersPreserved": true,
+      "sharedBalanceSaved": true,
+      "errors": []
     }
   ],
   "live": [
@@ -57,15 +83,9 @@
       "errors": []
     }
   ],
-  "localizationModesChecked": [
-    "Google Cloud",
-    "Relay API",
-    "NanoGPT",
-    "DeepSeek",
-    "OpenRouter"
-  ],
   "notes": [
-    "Live writes to extension settings were mocked; external calls were blocked in browser validation.",
-    "Update verified actual saved settings unchanged. No billing logic or paid model behavior was changed."
+    "Account UI uses synthetic data. Provider requests and real settings writes were blocked during live-browser checks.",
+    "Pure grouping checks: request-ID union, account totals/balance once, distinct request IDs, separate account groups, legacy uncertainty, absent caches and currency conversion.",
+    "Server update verified saved keys/configuration unchanged; actual user invoices were not reconciled."
   ]
 }
