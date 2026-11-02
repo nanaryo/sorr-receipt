@@ -3,7 +3,7 @@
   "version": 1,
   "config": {
     "name": "소르 영수증",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "description": "한국어 영수증과 최대 10개 크레딧 설정. LinkAPI 공유 계정 합산과 키별 배율, NanoGPT 충전식 표시를 지원합니다.",
     "runtime": "client",
     "capabilities": [

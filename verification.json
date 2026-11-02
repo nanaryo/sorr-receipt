@@ -1,9 +1,13 @@
 {
-  "version": "0.4.1",
+  "version": "0.4.2",
   "syntaxChecked": true,
-  "linkGroupingRegression": true,
-  "trackerAggregationRegression": true,
-  "missingModelsRegression": [
+  "regressions": {
+    "deepseekMoneyPrecision": true,
+    "deepseekPeriodsAndConnectionFiltering": true,
+    "linkRequestDeduplication": true,
+    "trackerAggregation": true
+  },
+  "fixtures": [
     {
       "profile": "pc",
       "requestIdCollisionFixed": true,
@@ -14,6 +18,9 @@
       "gptVisible": true,
       "trackerVisible": true,
       "trackerMoneyNotInvented": true,
+      "deepseekCreditActivityVisible": true,
+      "unchangedBalanceNotZeroUsage": true,
+      "unconfirmedAmountMarked": true,
       "nativeSelectionRestored": true,
       "paidCalls": 0,
       "errors": []
@@ -28,6 +35,9 @@
       "gptVisible": true,
       "trackerVisible": true,
       "trackerMoneyNotInvented": true,
+      "deepseekCreditActivityVisible": true,
+      "unchangedBalanceNotZeroUsage": true,
+      "unconfirmedAmountMarked": true,
       "nativeSelectionRestored": true,
       "paidCalls": 0,
       "errors": []
@@ -43,6 +53,8 @@
       "providerTransport": "server-read-log-replay",
       "gptVisible": true,
       "deepseekTrackerVisible": true,
+      "deepseekCreditCountsVisible": true,
+      "unconfirmedCostNotShownAsZero": true,
       "nativeTabVisuallyDeselected": true,
       "reopenWorks": true,
       "fitsWidth": true,
@@ -58,6 +70,8 @@
       "providerTransport": "server-read-log-replay",
       "gptVisible": true,
       "deepseekTrackerVisible": true,
+      "deepseekCreditCountsVisible": true,
+      "unconfirmedCostNotShownAsZero": true,
       "nativeTabVisuallyDeselected": true,
       "reopenWorks": true,
       "fitsWidth": true,
@@ -65,25 +79,17 @@
       "errors": []
     }
   ],
-  "liveProviderTransport": "Provider GET logs queried on the server and replayed into the real authenticated UI; browser settings writes and paid model calls blocked. Live memory-module tracker endpoint queried directly.",
+  "liveProviderTransport": "LinkAPI GET logs read on the server and replayed into the authenticated UI; actual tracker endpoint read directly. Browser settings writes and paid generation requests blocked.",
   "deployment": {
-    "version": "0.4.1",
+    "version": "0.4.2",
     "enabled": true,
     "storageUnchanged": true,
     "othersUnchanged": true,
     "serverRestarted": false
   },
-  "trackerCompanion": {
-    "readOnly": true,
-    "installed": true,
-    "rollbackPrepared": true,
-    "engineHealth": "ok",
-    "memoryHooks": "ok"
-  },
   "sha256": {
-    "extension.js": "23c9492a10bf5bfb446ceff0cc593f53b090125f741b15c020ec311d3807dc56",
-    "manifest.json": "c89b7e7cb696c807b176894b9fedf28abe0401ded98ffa27743b924cf8e7a612",
-    "maintenance/link-groups.js": "546eda6babba0ae6578d2120c27e58fbcc8e7e77e83bcc8566b0ca9081725b12",
-    "maintenance/receipt-usage.cjs": "26ed96c8ed5ae1342f62013541ad482762a426ceb12d8baff9800231cbf0ab1d"
+    "extension.js": "75b6f29dc81da075ee1f07c7293348b4fc6c4f9dd616f6139759f58af3afd8db",
+    "manifest.json": "777c5f39eb8d961561f1d31ac38d02aa9f88321294807af72381225bc0495c03",
+    "maintenance/deepseek-credit.js": "42671884063c5afb60d7394ab5497fbcbabb5afeb5f77dac209989295a9cc85a"
   }
 }

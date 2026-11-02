@@ -1,6 +1,6 @@
 # 소르 영수증 / Sorr Receipt
 
-Marinara personal extension 0.4.1. Adds a receipt and credit-balance tab immediately after Sorr Gallery, with on/off control through the normal external-extension list.
+Marinara personal extension 0.4.2. Adds a receipt and credit-balance tab immediately after Sorr Gallery, with on/off control through the normal external-extension list.
 
 ## Installation and use
 
@@ -25,7 +25,7 @@ Historical rate tables are retained. LinkAPI shared-account aggregation and Nano
 
 ## Maintenance
 
-Read AGENTS.md before editing. Version 0.4.1 targets the currently inspected Marinara 2.5.0 DOM. A future Home redesign may require updating the tab adapter.
+Read AGENTS.md before editing. Version 0.4.2 targets the currently inspected Marinara 2.5.0 DOM. A future Home redesign may require updating the tab adapter.
 
 The original legacy closure contains dormant non-receipt helpers; the adapter only exposes receipt/credit UI and scopes its document access. Do not treat this first separation as a complete rewrite of the original extension.
 
@@ -65,3 +65,11 @@ Tests cover duplicate request IDs, separate requests with equal timestamps/costs
 - Companion source is in `maintenance/receipt-usage.cjs`. On this owner's server it is registered by the existing memory module with `require('./receipt-usage.cjs').register(app,{serverDist,engine})` at the start of `routes(app)`. This requires a server restart; it is not auto-installed by GitHub extension updates. The browser extension itself still supports normal on/off, and the companion only serves read requests. Back up the original service before changing it; keep the engine's existing authentication in place.
 
 The transient credit-card `busy` flag is reset on preference load and omitted from saved preferences. An interrupted lookup cannot lock future refreshes after reopening the receipt.
+
+## 0.4.2 — DeepSeek credit activity and unconfirmed charges
+
+The DeepSeek credit card now shows today's and this month's saved custom-tracker run counts and total tokens for connections currently pointing to the official DeepSeek endpoint. This is a reference to current connection settings, not a historical model snapshot or a complete account billing log.
+
+An unchanged balance does not establish zero usage. If the balance-derived charge is zero, the card says that no balance change was detected and the charge remains unconfirmed. Where tracker activity exists, the receipt's service rows mark the amount unconfirmed and disclose that it was not included in the money totals. No amount is inferred from total tracker tokens, which lack an input/output/cache split. Positive sub-cent amounts are preserved up to six decimals instead of rounding to zero.
+
+Official balance endpoint: https://api-docs.deepseek.com/api/get-user-balance/ . It reports current balance, not a per-request usage history. Exact balance precision, billing delay and billed amounts must not be inferred from the absence of a reported change.
